@@ -1,0 +1,36 @@
+/* Import the existing design system from the static prototype */
+/* In production, copy styles.css content here or @import it */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dark: #9A7A2E;
+  --navy: #0D1B2A;
+  --navy-mid: #162436;
+  --navy-light: #1E3248;
+  --white: #FFFFFF;
+  --off-white: #F8F6F2;
+  --text: #2C2C2C;
+  --text-muted: #6B7280;
+  --border: #E5E7EB;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.15);
+  --font: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--text); background: var(--white); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+
+/* Utility */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
