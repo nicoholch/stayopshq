@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No hotel found for this account' }, { status: 404 });
     }
 
-    const hotel = profile.hotels as { stripe_customer_id: string | null; name: string } | null;
+    const hotel = (profile.hotels as unknown) as { stripe_customer_id: string | null; name: string } | null;
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://pulsestay.com';
 
     // Create or reuse Stripe customer
