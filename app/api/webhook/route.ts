@@ -46,9 +46,8 @@ export async function POST(req: NextRequest) {
       // ── Payment completed → activate plan ───────────────────────────
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        const hotelId = session.subscription_data?.metadata?.hotel_id
-          ?? session.metadata?.hotel_id;
-        const plan = session.subscription_data?.metadata?.plan ?? 'starter';
+        const hotelId = session.metadata?.hotel_id;
+        const plan = session.metadata?.plan ?? 'starter';
 
         if (hotelId) {
           await supabase.from('hotels').update({
