@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { resend } from '@/lib/resend';
+import { getResend } from '@/lib/resend';
 import type { Complaint } from '@/types';
 
 export async function POST(req: NextRequest) {
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     ? buildComplaintEmail({ guest, hotelName, complaints: complaints ?? [], resolvedComplaints, unresolvedComplaints })
     : buildStandardEmail({ guest, hotelName });
 
-  const { error: emailErr } = await resend.emails.send({
+  const { error: emailErr } = await getResend().emails.send({
     from: `${hotelName} <noreply@pulsestay.com>`,
     to:   guest.email,
     subject,
