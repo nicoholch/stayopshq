@@ -43,7 +43,6 @@ const STEP_LABELS = ['Property', 'Goals', 'Departments', 'Launch'];
 // ── Component ──────────────────────────────────────────────────────────────────
 export default function OnboardingPage() {
   const router = useRouter();
-  const supabase = createClient();
 
   const [step, setStep] = useState<Step>('hotel');
   const [saving, setSaving] = useState(false);
@@ -85,6 +84,7 @@ export default function OnboardingPage() {
     setSaving(true);
     setError('');
     try {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { router.push('/login'); return; }
 
