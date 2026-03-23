@@ -9,6 +9,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, Guest, Hotel, DepartmentComplaintCount, ComplaintSeverity, ComplaintStatus } from '@/types';
+import { AlertTriangle, AlertCircle, Info, Check, Mail, Sparkles } from 'lucide-react';
 
 interface Props {
   hotel: Hotel;
@@ -159,7 +160,7 @@ export default function DashboardClient({
           setOpen(n => n + 1);
           if (c.severity === 'critical' || c.severity === 'high') {
             showAlert(
-              `${c.severity === 'critical' ? '🚨' : '⚠️'} ${c.severity.toUpperCase()} complaint — ${c.department}`,
+              `${c.severity.toUpperCase()} complaint — ${c.department}`,
               c.description,
             );
           }
@@ -188,14 +189,14 @@ export default function DashboardClient({
       {/* Demo mode banner */}
       {isDemo && (
         <div style={{ background: '#162436', borderBottom: '1px solid rgba(201,168,76,0.3)', color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: '10px 24px', fontSize: '13px' }}>
-          🎭 <strong style={{ color: '#C9A84C' }}>Demo mode</strong> — showing sample data.{' '}
+          <Info size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} /><strong style={{ color: '#C9A84C' }}>Demo mode</strong> — showing sample data.{' '}
           <a href="/login" style={{ color: '#C9A84C', fontWeight: 600 }}>Sign up or connect Supabase</a> to see live data.
         </div>
       )}
 
       {showBanner && (
         <div style={{ background: 'var(--success)', color: 'white', textAlign: 'center', padding: '12px', fontSize: '14px', fontWeight: 600 }}>
-          🎉 Welcome to PulseStay {hotel.plan}! Your 14-day trial has started.
+          Welcome to PulseStay {hotel.plan}! Your 14-day trial has started.
           <button onClick={() => setShowBanner(false)} style={{ marginLeft: 16, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: 18 }}>×</button>
         </div>
       )}
@@ -206,7 +207,7 @@ export default function DashboardClient({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
           <div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>
-              Good morning, {profile.full_name.split(' ')[0]} 👋
+              Good morning, {profile.full_name.split(' ')[0]}
             </h1>
             <p style={{ fontSize: 14, color: 'var(--text-muted)', marginTop: 4 }}>
               {hotel.name} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} ·{' '}
@@ -234,8 +235,8 @@ export default function DashboardClient({
         {/* KPI cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 28 }}>
           {[
-            { label: 'Open Complaints',  value: open,     trend: open > 0 ? '⚠ needs attention' : '✓ All clear',     color: open > 0 ? 'var(--danger)' : 'var(--success)' },
-            { label: 'Critical / High',  value: criticalCount, trend: criticalCount > 0 ? 'Immediate action' : '✓ None active', color: criticalCount > 0 ? '#7C3AED' : 'var(--success)' },
+            { label: 'Open Complaints',  value: open,     trend: open > 0 ? 'Needs attention' : 'All clear',     color: open > 0 ? 'var(--danger)' : 'var(--success)' },
+            { label: 'Critical / High',  value: criticalCount, trend: criticalCount > 0 ? 'Immediate action' : 'None active', color: criticalCount > 0 ? '#7C3AED' : 'var(--success)' },
             { label: 'Resolved Today',   value: resolved, trend: '↑ live',                                             color: 'var(--navy)' },
             { label: 'AI Insights',      value: isPro ? '3 new' : '—', trend: isPro ? 'View below' : 'Pro plan required', color: isPro ? 'var(--gold-dark)' : 'var(--text-muted)' },
           ].map(k => (
@@ -330,7 +331,7 @@ export default function DashboardClient({
                             border: '1px solid var(--success)', color: 'var(--success)',
                             background: 'transparent', cursor: 'pointer',
                           }}>
-                            ✓ Resolve
+                            <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 3 }} />Resolve
                           </button>
                         )}
                         {canResolve && isResolving && (
@@ -405,7 +406,7 @@ export default function DashboardClient({
                             opacity: resolution.trim() && satisfaction !== null && !submitting ? 1 : 0.5,
                           }}
                         >
-                          {submitting ? 'Saving…' : '✓ Mark as Resolved'}
+                          {submitting ? 'Saving…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Check size={14} strokeWidth={2.5} />Mark as Resolved</span>}
                         </button>
                       </div>
                     )}
@@ -413,7 +414,7 @@ export default function DashboardClient({
                     {/* ── Resolution summary (once resolved) ── */}
                     {c.status === 'resolved' && c.resolution && (
                       <div style={{ padding: '10px 14px', borderTop: '1px solid rgba(16,185,129,0.2)', background: 'rgba(16,185,129,0.04)' }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--success)', marginBottom: 4 }}>✓ RESOLVED</div>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--success)', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Check size={11} strokeWidth={2.5} />RESOLVED</div>
                         <div style={{ fontSize: 12, color: 'var(--text)', marginBottom: c.compensation || c.guest_satisfaction ? 6 : 0 }}>{c.resolution}</div>
                         {c.compensation && (
                           <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
@@ -506,14 +507,14 @@ export default function DashboardClient({
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12 }}>{g.email}</div>
                     {sent ? (
-                      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)' }}>✓ Follow-up email sent</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--success)', display: 'flex', alignItems: 'center', gap: 5 }}><Check size={12} strokeWidth={2.5} />Follow-up email sent</div>
                     ) : (
                       <button onClick={() => sendFollowUp(g)} disabled={sending} style={{
                         width: '100%', padding: '8px', borderRadius: 7, fontWeight: 700, fontSize: 12, cursor: sending ? 'not-allowed' : 'pointer',
                         background: hasComplaints ? 'var(--danger)' : 'var(--navy)',
                         color: 'white', border: 'none', opacity: sending ? 0.6 : 1,
                       }}>
-                        {sending ? 'Sending…' : hasComplaints ? '✉ Send Priority Follow-up' : '✉ Send Follow-up Email'}
+                        {sending ? 'Sending…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Mail size={13} strokeWidth={2} />{hasComplaints ? 'Send Priority Follow-up' : 'Send Follow-up Email'}</span>}
                       </button>
                     )}
                   </div>
@@ -526,7 +527,7 @@ export default function DashboardClient({
         {/* Pro gate: AI Insights */}
         {!isPro && (
           <div style={{ marginTop: 24, background: 'var(--navy)', borderRadius: 12, padding: 32, textAlign: 'center', color: 'white' }}>
-            <div style={{ fontSize: '1.5rem', marginBottom: 12 }}>🤖 AI Insights</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}><Sparkles size={22} color="#C9A84C" strokeWidth={1.75} /><span style={{ fontSize: '1.2rem', fontWeight: 700 }}>AI Insights</span></div>
             <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 20, fontSize: 15 }}>
               Upgrade to Pro to get AI-generated pattern detection, repeat-complaint identification, and prioritized resolution recommendations.
             </p>

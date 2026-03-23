@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import { Zap } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -54,7 +55,7 @@ function LoginForm() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
-            <span style={{ width: 40, height: 40, background: '#C9A84C', borderRadius: 10, display: 'grid', placeItems: 'center', fontSize: 20 }}>⚡</span>
+            <span style={{ width: 40, height: 40, background: '#C9A84C', borderRadius: 10, display: 'grid', placeItems: 'center' }}><Zap size={20} color="#0D1B2A" strokeWidth={2.5} /></span>
             PulseStay
           </Link>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, marginTop: 12 }}>

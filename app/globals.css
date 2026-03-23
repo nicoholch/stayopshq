@@ -1,8 +1,6 @@
 /* Import the existing design system from the static prototype */
 /* In production, copy styles.css content here or @import it */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 /* ── CSS Variables ── */
 :root {
   --gold: #C9A84C;
@@ -23,12 +21,26 @@
   --radius-sm: 8px;
   --shadow: 0 4px 24px rgba(0,0,0,0.08);
   --shadow-lg: 0 12px 48px rgba(0,0,0,0.15);
-  --font: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-serif), Georgia, 'Times New Roman', serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--font); color: var(--text); background: var(--white); line-height: 1.6; }
+body { font-family: var(--font); color: var(--text); background: var(--white); line-height: 1.7; font-weight: 400; }
+
+/* ── Display / headline type ── */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  font-weight: 400;
+}
+h4, h5, h6 {
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
 a { text-decoration: none; color: inherit; }
 
 /* Utility */

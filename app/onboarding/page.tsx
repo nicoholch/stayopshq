@@ -3,31 +3,36 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import {
+  Zap, Target, BedDouble, UtensilsCrossed, TrendingUp, Star, Heart,
+  ConciergeBell, Sparkles, Map, Dumbbell, Waves, Car, Leaf, Wrench, Check, PartyPopper,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type Step = 'hotel' | 'goals' | 'departments' | 'done';
 
 const PROPERTY_TYPES = ['Resort', 'Boutique Hotel', 'Business Hotel', 'Spa & Wellness', 'Beach Resort', 'City Hotel', 'Lodge'];
 
-const GOALS = [
-  { id: 'service', icon: '🎯', label: 'Improve Service Quality', desc: 'Track staff responsiveness and guest satisfaction across all touchpoints.' },
-  { id: 'rooms', icon: '🛏️', label: 'Elevate Room Experience', desc: 'Monitor cleanliness, comfort, and maintenance response times.' },
-  { id: 'dining', icon: '🍽️', label: 'Enhance Food & Beverage', desc: 'Track meal quality, service speed, and dietary accommodation.' },
-  { id: 'conversion', icon: '📈', label: 'Increase Feedback Volume', desc: 'Capture more responses — target 30%+ conversion vs the industry 10%.' },
-  { id: 'reputation', icon: '⭐', label: 'Protect Online Reputation', desc: 'Catch negative experiences before they become public reviews.' },
-  { id: 'retention', icon: '💛', label: 'Drive Guest Retention', desc: 'Identify what brings guests back and double down on it.' },
+const GOALS: { id: string; Icon: LucideIcon; label: string; desc: string }[] = [
+  { id: 'service',    Icon: Target,         label: 'Improve Service Quality',   desc: 'Track staff responsiveness and guest satisfaction across all touchpoints.' },
+  { id: 'rooms',      Icon: BedDouble,      label: 'Elevate Room Experience',   desc: 'Monitor cleanliness, comfort, and maintenance response times.' },
+  { id: 'dining',     Icon: UtensilsCrossed,label: 'Enhance Food & Beverage',   desc: 'Track meal quality, service speed, and dietary accommodation.' },
+  { id: 'conversion', Icon: TrendingUp,     label: 'Increase Feedback Volume',  desc: 'Capture more responses — target 30%+ conversion vs the industry 10%.' },
+  { id: 'reputation', Icon: Star,           label: 'Protect Online Reputation', desc: 'Catch negative experiences before they become public reviews.' },
+  { id: 'retention',  Icon: Heart,          label: 'Drive Guest Retention',     desc: 'Identify what brings guests back and double down on it.' },
 ];
 
-const DEPARTMENTS = [
-  { id: 'Front Desk', icon: '🛎️' },
-  { id: 'Housekeeping', icon: '🧹' },
-  { id: 'Food & Beverage', icon: '🍽️' },
-  { id: 'Concierge', icon: '🗺️' },
-  { id: 'Spa & Fitness', icon: '🏋️' },
-  { id: 'Pool & Beach', icon: '🏊' },
-  { id: 'Valet & Transport', icon: '🚗' },
-  { id: 'Activities', icon: '🌿' },
-  { id: 'Maintenance', icon: '⚙️' },
+const DEPARTMENTS: { id: string; Icon: LucideIcon }[] = [
+  { id: 'Front Desk',        Icon: ConciergeBell },
+  { id: 'Housekeeping',      Icon: Sparkles },
+  { id: 'Food & Beverage',   Icon: UtensilsCrossed },
+  { id: 'Concierge',         Icon: Map },
+  { id: 'Spa & Fitness',     Icon: Dumbbell },
+  { id: 'Pool & Beach',      Icon: Waves },
+  { id: 'Valet & Transport', Icon: Car },
+  { id: 'Activities',        Icon: Leaf },
+  { id: 'Maintenance',       Icon: Wrench },
 ];
 
 const STEPS: Step[] = ['hotel', 'goals', 'departments', 'done'];
@@ -123,7 +128,7 @@ export default function OnboardingPage() {
 
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white', marginBottom: 40 }}>
-        <span style={{ width: 36, height: 36, background: '#C9A84C', borderRadius: 8, display: 'grid', placeItems: 'center', fontSize: 18 }}>⚡</span>
+        <span style={{ width: 36, height: 36, background: '#C9A84C', borderRadius: 8, display: 'grid', placeItems: 'center' }}><Zap size={18} color="#0D1B2A" strokeWidth={2.5} /></span>
         PulseStay
       </div>
 
@@ -134,7 +139,7 @@ export default function OnboardingPage() {
             {STEP_LABELS.map((label, i) => (
               <div key={label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                 <div style={{ width: 28, height: 28, borderRadius: '50%', display: 'grid', placeItems: 'center', fontSize: 12, fontWeight: 700, background: i <= stepIndex ? '#C9A84C' : 'rgba(255,255,255,0.1)', color: i <= stepIndex ? '#0D1B2A' : 'rgba(255,255,255,0.3)', transition: 'all 0.3s' }}>
-                  {i < stepIndex ? '✓' : i + 1}
+                  {i < stepIndex ? <Check size={13} strokeWidth={2.5} /> : i + 1}
                 </div>
                 <span style={{ fontSize: 11, color: i <= stepIndex ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.25)', fontWeight: 600 }}>{label}</span>
               </div>
@@ -230,12 +235,12 @@ export default function OnboardingPage() {
                 const maxed = selectedGoals.length >= 3 && !selected;
                 return (
                   <button key={g.id} onClick={() => !maxed && toggleGoal(g.id)} style={{ padding: '16px', borderRadius: 10, border: `1px solid ${selected ? '#C9A84C' : 'rgba(255,255,255,0.08)'}`, background: selected ? 'rgba(201,168,76,0.12)' : 'rgba(255,255,255,0.03)', cursor: maxed ? 'not-allowed' : 'pointer', opacity: maxed ? 0.4 : 1, textAlign: 'left', display: 'flex', alignItems: 'center', gap: 14, transition: 'all 0.2s' }}>
-                    <span style={{ fontSize: '1.5rem', flexShrink: 0 }}>{g.icon}</span>
+                    <span style={{ width: 36, height: 36, borderRadius: 8, background: selected ? 'rgba(201,168,76,0.2)' : 'rgba(255,255,255,0.07)', display: 'grid', placeItems: 'center', flexShrink: 0 }}><g.Icon size={18} color={selected ? '#C9A84C' : 'rgba(255,255,255,0.5)'} strokeWidth={1.75} /></span>
                     <div>
                       <div style={{ fontWeight: 700, fontSize: 14, color: selected ? '#C9A84C' : 'white' }}>{g.label}</div>
                       <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{g.desc}</div>
                     </div>
-                    {selected && <span style={{ marginLeft: 'auto', color: '#C9A84C', flexShrink: 0 }}>✓</span>}
+                    {selected && <Check size={16} color="#C9A84C" strokeWidth={2.5} style={{ marginLeft: 'auto', flexShrink: 0 }} />}
                   </button>
                 );
               })}
@@ -262,8 +267,8 @@ export default function OnboardingPage() {
                 const selected = selectedDepts.includes(d.id);
                 return (
                   <button key={d.id} onClick={() => toggleDept(d.id)} style={{ padding: '16px 10px', borderRadius: 10, border: `1px solid ${selected ? '#C9A84C' : 'rgba(255,255,255,0.08)'}`, background: selected ? 'rgba(201,168,76,0.12)' : 'rgba(255,255,255,0.03)', cursor: 'pointer', textAlign: 'center', transition: 'all 0.2s', position: 'relative' }}>
-                    {selected && <span style={{ position: 'absolute', top: 8, right: 8, color: '#C9A84C', fontSize: 12, fontWeight: 700 }}>✓</span>}
-                    <div style={{ fontSize: '1.6rem', marginBottom: 8 }}>{d.icon}</div>
+                    {selected && <Check size={13} color="#C9A84C" strokeWidth={2.5} style={{ position: 'absolute', top: 8, right: 8 }} />}
+                    <div style={{ display: 'grid', placeItems: 'center', marginBottom: 8 }}><d.Icon size={22} color={selected ? '#C9A84C' : 'rgba(255,255,255,0.5)'} strokeWidth={1.75} /></div>
                     <div style={{ fontSize: 12, fontWeight: 600, color: selected ? '#C9A84C' : 'rgba(255,255,255,0.6)', lineHeight: 1.3 }}>{d.id}</div>
                   </button>
                 );
@@ -278,7 +283,7 @@ export default function OnboardingPage() {
                 disabled={saving || selectedDepts.length === 0}
                 style={{ flex: 1, padding: 15, background: '#C9A84C', color: '#0D1B2A', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving || selectedDepts.length === 0 ? 0.7 : 1 }}
               >
-                {saving ? 'Setting up your account…' : 'Launch PulseStay 🚀'}
+                {saving ? 'Setting up your account…' : 'Launch PulseStay →'}
               </button>
             </div>
           </div>
@@ -287,7 +292,9 @@ export default function OnboardingPage() {
         {/* ── Step 4: Done ── */}
         {step === 'done' && (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: '4rem', marginBottom: 20 }}>🎉</div>
+            <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'rgba(201,168,76,0.15)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
+              <PartyPopper size={36} color="#C9A84C" strokeWidth={1.75} />
+            </div>
             <h2 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 800, marginBottom: 12 }}>You're all set!</h2>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15, marginBottom: 8 }}>
               <strong style={{ color: 'white' }}>{hotelName}</strong> is live on PulseStay.

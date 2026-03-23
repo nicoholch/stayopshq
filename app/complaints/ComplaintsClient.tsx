@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, ComplaintSeverity, ComplaintStatus, Department } from '@/types';
+import { Check } from 'lucide-react';
 
 interface Props {
   initialComplaints: Complaint[];
@@ -259,7 +260,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                         {/* Inline resolve form */}
                         {c.status !== 'resolved' && !resolving && (
                           <button onClick={(e) => { e.stopPropagation(); setResolvingId(c.id); setResolution(''); setCompensation(''); setSatisfaction(null); }} style={{ padding: '9px 18px', border: '1.5px solid var(--success)', color: 'var(--success)', background: 'transparent', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
-                            ✓ Resolve this complaint
+                            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Resolve this complaint</span>
                           </button>
                         )}
 
@@ -274,7 +275,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                             </div>
                             <div style={{ display: 'flex', gap: 8 }}>
                               <button onClick={() => submitResolve(c)} disabled={!resolution.trim() || satisfaction === null || submitting} style={{ flex: 1, padding: '9px', background: 'var(--success)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: resolution.trim() && satisfaction !== null ? 1 : 0.5 }}>
-                                {submitting ? 'Saving…' : '✓ Mark Resolved'}
+                                {submitting ? 'Saving…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Mark Resolved</span>}
                               </button>
                               <button onClick={() => setResolvingId(null)} style={{ padding: '9px 14px', border: '1.5px solid var(--border)', background: 'white', borderRadius: 6, fontSize: 13, cursor: 'pointer', color: 'var(--text-muted)' }}>Cancel</button>
                             </div>

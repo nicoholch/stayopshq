@@ -10,6 +10,11 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Department, ComplaintCategory, ComplaintSeverity, Guest } from '@/types';
+import {
+  ConciergeBell, Sparkles, UtensilsCrossed, Map, Dumbbell,
+  Waves, Car, Leaf, Wrench, Check, AlertTriangle, CheckCircle2,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 const DEPARTMENTS: Department[] = [
   'Front Desk', 'Housekeeping', 'Food & Beverage',
@@ -17,16 +22,16 @@ const DEPARTMENTS: Department[] = [
   'Valet & Transport', 'Maintenance',
 ];
 
-const DEPT_EMOJI: Record<Department, string> = {
-  'Front Desk':        '🛎️',
-  'Housekeeping':      '🧹',
-  'Food & Beverage':   '🍽️',
-  'Concierge':         '🗺️',
-  'Spa & Fitness':     '🏋️',
-  'Pool & Beach':      '🏊',
-  'Valet & Transport': '🚗',
-  'Activities':        '🌿',
-  'Maintenance':       '⚙️',
+const DEPT_ICON: Record<Department, LucideIcon> = {
+  'Front Desk':        ConciergeBell,
+  'Housekeeping':      Sparkles,
+  'Food & Beverage':   UtensilsCrossed,
+  'Concierge':         Map,
+  'Spa & Fitness':     Dumbbell,
+  'Pool & Beach':      Waves,
+  'Valet & Transport': Car,
+  'Activities':        Leaf,
+  'Maintenance':       Wrench,
 };
 
 const CATEGORIES: ComplaintCategory[] = [
@@ -158,7 +163,7 @@ export default function CapturePage() {
                     color: dept === d ? 'var(--gold-dark)' : 'var(--text)',
                     transition: 'all 0.15s',
                   }}>
-                    <span style={{ display: 'block', fontSize: '1.3rem', marginBottom: 4 }}>{DEPT_EMOJI[d]}</span>
+                    {(() => { const Icon = DEPT_ICON[d]; return <Icon size={20} strokeWidth={1.75} style={{ display: 'block', margin: '0 auto 4px' }} />; })()}
                     {d}
                   </button>
                 ))}
@@ -187,7 +192,7 @@ export default function CapturePage() {
                   </select>
                   {selectedGuestId && (
                     <p style={{ fontSize: 11, color: 'var(--success)', marginTop: 5, fontWeight: 600 }}>
-                      ✓ Complaint will be linked to this guest's record and personalise their follow-up email.
+                      <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 4 }} />Complaint will be linked to this guest's record and personalise their follow-up email.
                     </p>
                   )}
                 </div>
@@ -268,7 +273,7 @@ export default function CapturePage() {
                 transition: 'opacity 0.2s',
               }}
             >
-              {saving ? 'Logging complaint…' : '⚠ Log Complaint'}
+              {saving ? 'Logging complaint…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><AlertTriangle size={16} strokeWidth={2} />Log Complaint</span>}
             </button>
           </div>
         )}
@@ -276,7 +281,9 @@ export default function CapturePage() {
         {/* ── Success ── */}
         {step === 'success' && (
           <div style={{ background: 'white', borderRadius: 12, padding: 60, boxShadow: 'var(--shadow)', textAlign: 'center' }}>
-            <div style={{ fontSize: '3.5rem', marginBottom: 20 }}>✅</div>
+            <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
+              <CheckCircle2 size={36} color="#10B981" strokeWidth={1.75} />
+            </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 10 }}>Complaint Logged</h2>
             <p style={{ color: 'var(--text-muted)', marginBottom: 32, maxWidth: 340, margin: '0 auto 32px' }}>
               Management has been notified. The complaint is now visible on the live dashboard.

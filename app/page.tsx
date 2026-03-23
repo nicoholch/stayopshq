@@ -5,10 +5,30 @@
 
 import Link from 'next/link';
 import CheckoutButton from '@/components/CheckoutButton';
+import {
+  Zap, X, Check, MessageSquare, Clock, TrendingDown, CheckCircle2,
+  AlertTriangle, Activity, Building2, Bell, Sparkles,
+} from 'lucide-react';
+
+const STAT_CARDS = [
+  { Icon: MessageSquare, value: '67%',    desc: 'Of complaints are reported verbally and never logged',            positive: false },
+  { Icon: Clock,         value: '3–7 days', desc: 'Average delay before management learns of a serious issue',     positive: false },
+  { Icon: TrendingDown,  value: '2–3 stars', desc: 'The review score when a complaint goes unresolved',            positive: false },
+  { Icon: CheckCircle2,  value: '92%+',   desc: 'Resolution rate when complaints are logged in real time',         positive: true  },
+];
+
+const FEATURES = [
+  { Icon: Zap,           title: '30-Second Logging',         body: 'Staff log a complaint in under 30 seconds. Department, category, description, severity — one screen, no friction.' },
+  { Icon: AlertTriangle, title: 'Severity Triage',           body: 'Four levels — Low, Medium, High, Critical — so management always knows what to tackle first and can respond proportionally.' },
+  { Icon: Activity,      title: 'Real-Time Dashboard',       body: 'Every complaint appears on the management dashboard the moment it is submitted, with live status tracking from open to resolved.' },
+  { Icon: Building2,     title: 'By-Department Breakdown',   body: 'Instantly see which departments are generating the most open complaints, so you can spot systemic issues and intervene early.' },
+  { Icon: Bell,          title: 'Instant Manager Alerts',    body: 'High and critical complaints trigger an immediate toast alert to management — no more waiting to find out about serious issues.' },
+  { Icon: Sparkles,      title: 'AI Pattern Detection',      body: 'Pro plan: AI identifies recurring complaint patterns, repeat issues by room or department, and surfaces prioritized recommendations.' },
+];
 
 export default function HomePage() {
   return (
-    <main style={{ fontFamily: 'var(--font-inter, Inter, sans-serif)' }}>
+    <main style={{ fontFamily: 'var(--font)' }}>
 
       {/* ── Navbar ── */}
       <nav style={{
@@ -17,8 +37,10 @@ export default function HomePage() {
         boxShadow: '0 2px 24px rgba(0,0,0,0.2)',
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.25rem', color: 'white' }}>
-            <span style={{ width: 36, height: 36, background: '#C9A84C', borderRadius: 8, display: 'grid', placeItems: 'center', fontSize: 18 }}>⚡</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.45rem', color: 'white', letterSpacing: '-0.02em' }}>
+            <span style={{ width: 36, height: 36, background: '#C9A84C', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
+              <Zap size={18} color="#0D1B2A" strokeWidth={2.5} />
+            </span>
             PulseStay
           </div>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
@@ -54,7 +76,7 @@ export default function HomePage() {
             <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 24 }}>
               Built for 5-Star Resorts
             </span>
-            <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', fontWeight: 900, color: 'white', lineHeight: 1.15, marginBottom: 24 }}>
+            <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', fontWeight: 400, fontFamily: 'var(--font-display)', color: 'white', lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 24 }}>
               Resolve Every Guest Complaint <span style={{ color: '#C9A84C' }}>Before They Check Out</span>
             </h1>
             <p style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: 40, maxWidth: 580 }}>
@@ -78,7 +100,7 @@ export default function HomePage() {
                 { value: '4×', label: 'Fewer negative reviews' },
               ].map(s => (
                 <div key={s.label}>
-                  <div style={{ fontSize: '2rem', fontWeight: 800, color: '#C9A84C' }}>{s.value}</div>
+                  <div style={{ fontSize: '2rem', fontWeight: 800, color: '#C9A84C', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.value}</div>
                   <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{s.label}</div>
                 </div>
               ))}
@@ -95,7 +117,7 @@ export default function HomePage() {
               <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 20 }}>
                 The Problem
               </span>
-              <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 800, marginBottom: 20 }}>Complaints Get Lost. Then They Go Public.</h2>
+              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 20 }}>Complaints Get Lost. Then They Go Public.</h2>
               <p style={{ color: '#6B7280', lineHeight: 1.8, marginBottom: 16 }}>
                 A guest mentions a broken AC at breakfast. The server passes it on verbally. By the afternoon, nothing has been done — and by the time the guest checks out, they're writing a 2-star TripAdvisor review.
               </p>
@@ -108,23 +130,20 @@ export default function HomePage() {
                   'Staff have no simple, fast tool to escalate issues on the spot',
                 ].map(item => (
                   <li key={item} style={{ display: 'flex', gap: 12, fontSize: 15, alignItems: 'flex-start' }}>
-                    <span style={{ color: '#EF4444', fontWeight: 700, flexShrink: 0 }}>✕</span>
+                    <X size={16} color="#EF4444" strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
                     {item}
                   </li>
                 ))}
               </ul>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 16 }}>
-              {[
-                { icon: '🗣️', value: '67%', desc: 'Of complaints are reported verbally and never logged', positive: false },
-                { icon: '⏳', value: '3–7 days', desc: 'Average delay before management learns of a serious issue', positive: false },
-                { icon: '⭐', value: '2–3 stars', desc: 'The review score when a complaint goes unresolved', positive: false },
-                { icon: '✅', value: '92%+', desc: 'Resolution rate when complaints are logged in real time', positive: true },
-              ].map(s => (
+              {STAT_CARDS.map(s => (
                 <div key={s.value} style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', gap: 20, borderLeft: `4px solid ${s.positive ? '#10B981' : '#EF4444'}` }}>
-                  <span style={{ fontSize: '2rem' }}>{s.icon}</span>
+                  <span style={{ width: 48, height: 48, borderRadius: 10, background: s.positive ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+                    <s.Icon size={22} color={s.positive ? '#10B981' : '#EF4444'} />
+                  </span>
                   <div>
-                    <div style={{ fontSize: '2rem', fontWeight: 800, color: s.positive ? '#10B981' : '#EF4444' }}>{s.value}</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 800, color: s.positive ? '#10B981' : '#EF4444', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.value}</div>
                     <div style={{ fontSize: 14, color: '#6B7280', marginTop: 4 }}>{s.desc}</div>
                   </div>
                 </div>
@@ -140,7 +159,7 @@ export default function HomePage() {
           <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
             How It Works
           </span>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 800, marginBottom: 12 }}>From Complaint to Resolution in Minutes</h2>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>From Complaint to Resolution in Minutes</h2>
           <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 560, margin: '0 auto 64px' }}>A simple four-step loop that ensures no guest complaint slips through the cracks.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
@@ -166,20 +185,15 @@ export default function HomePage() {
             <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
               Platform Features
             </span>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 800, marginBottom: 12 }}>Everything You Need to Close Every Complaint</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Everything You Need to Close Every Complaint</h2>
             <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 560, margin: '0 auto' }}>Built for the operational pace of a luxury hospitality environment.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-            {[
-              { icon: '⚡', title: '30-Second Logging', body: 'Staff log a complaint in under 30 seconds. Department, category, description, severity — one screen, no friction.' },
-              { icon: '🚨', title: 'Severity Triage', body: 'Four levels — Low, Medium, High, Critical — so management always knows what to tackle first and can respond proportionally.' },
-              { icon: '📡', title: 'Real-Time Dashboard', body: 'Every complaint appears on the management dashboard the moment it is submitted, with live status tracking from open to resolved.' },
-              { icon: '🏨', title: 'By-Department Breakdown', body: 'Instantly see which departments are generating the most open complaints, so you can spot systemic issues and intervene early.' },
-              { icon: '🔔', title: 'Instant Manager Alerts', body: 'High and critical complaints trigger an immediate toast alert to management — no more waiting to find out about serious issues.' },
-              { icon: '🤖', title: 'AI Pattern Detection', body: 'Pro plan: AI identifies recurring complaint patterns, repeat issues by room or department, and surfaces prioritized recommendations.' },
-            ].map(f => (
+            {FEATURES.map(f => (
               <div key={f.title} style={{ background: 'white', borderRadius: 12, padding: '32px 28px', boxShadow: '0 4px 24px rgba(0,0,0,0.06)', border: '1px solid transparent' }}>
-                <div style={{ width: 52, height: 52, borderRadius: 12, background: 'rgba(201,168,76,0.1)', display: 'grid', placeItems: 'center', fontSize: 22, marginBottom: 20 }}>{f.icon}</div>
+                <div style={{ width: 52, height: 52, borderRadius: 12, background: 'rgba(201,168,76,0.1)', display: 'grid', placeItems: 'center', marginBottom: 20 }}>
+                  <f.Icon size={22} color="#9A7A2E" strokeWidth={1.75} />
+                </div>
                 <h4 style={{ fontWeight: 700, marginBottom: 10 }}>{f.title}</h4>
                 <p style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.7 }}>{f.body}</p>
               </div>
@@ -195,7 +209,7 @@ export default function HomePage() {
             <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#C9A84C', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
               Simple Pricing
             </span>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 800, color: 'white', marginBottom: 12 }}>Start Resolving Complaints in Minutes</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>Start Resolving Complaints in Minutes</h2>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. 14-day free trial on all plans.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
@@ -229,12 +243,13 @@ export default function HomePage() {
                   </span>
                 )}
                 <div style={{ fontSize: 13, fontWeight: 600, color: plan.featured ? 'rgba(13,27,42,0.6)' : 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 16 }}>{plan.name}</div>
-                <div style={{ fontSize: '2.8rem', fontWeight: 900, color: plan.featured ? '#0D1B2A' : 'white' }}>{plan.price}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: plan.featured ? '#0D1B2A' : 'white' }}>{plan.price}</div>
                 <div style={{ fontSize: 13, color: plan.featured ? 'rgba(13,27,42,0.5)' : 'rgba(255,255,255,0.4)', marginBottom: 28 }}>{plan.period}</div>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' as const, gap: 12, marginBottom: 32 }}>
                   {plan.features.map(f => (
                     <li key={f} style={{ display: 'flex', gap: 10, fontSize: 14, color: plan.featured ? '#0D1B2A' : 'rgba(255,255,255,0.75)', alignItems: 'flex-start' }}>
-                      <span style={{ color: plan.featured ? '#0D1B2A' : '#10B981', flexShrink: 0 }}>✓</span>{f}
+                      <Check size={15} color={plan.featured ? '#0D1B2A' : '#10B981'} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
+                      {f}
                     </li>
                   ))}
                 </ul>
@@ -252,7 +267,7 @@ export default function HomePage() {
       {/* ── CTA ── */}
       <section style={{ padding: '96px 0', background: '#162436', textAlign: 'center' as const }}>
         <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px' }}>
-          <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 800, color: 'white', marginBottom: 20 }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 20 }}>
             Stop Letting Complaints <span style={{ color: '#C9A84C' }}>Turn Into Bad Reviews</span>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '1.05rem', marginBottom: 40 }}>
@@ -273,8 +288,10 @@ export default function HomePage() {
       <footer style={{ background: '#070E16', padding: '48px 0 32px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.1rem', color: 'white' }}>
-              <span style={{ width: 30, height: 30, background: '#C9A84C', borderRadius: 6, display: 'grid', placeItems: 'center', fontSize: 14 }}>⚡</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.1rem', color: 'white', letterSpacing: '-0.02em' }}>
+              <span style={{ width: 30, height: 30, background: '#C9A84C', borderRadius: 6, display: 'grid', placeItems: 'center' }}>
+                <Zap size={15} color="#0D1B2A" strokeWidth={2.5} />
+              </span>
               PulseStay
             </div>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)' }}>© 2026 PulseStay Inc. All rights reserved.</p>
