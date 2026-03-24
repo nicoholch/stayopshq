@@ -254,9 +254,9 @@ export default function HomePage() {
                   ))}
                 </ul>
                 {plan.name === 'Enterprise' ? (
-                  <a href="mailto:sales@pulsestay.com" style={{ display: 'block', textAlign: 'center', width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, ...plan.ctaStyle }}>{plan.cta}</a>
+                  <a href="mailto:sales@pulsestay.com" style={{ display: 'block', textAlign: 'center', width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', ...plan.ctaStyle }}>{plan.cta}</a>
                 ) : (
-                  <CheckoutButton plan={plan.name.toLowerCase() as 'starter' | 'pro'} label={plan.cta} style={{ width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: 'pointer', ...plan.ctaStyle }} />
+                  <a href="/login" style={{ display: 'block', textAlign: 'center', width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', ...plan.ctaStyle }}>{plan.cta}</a>
                 )}
               </div>
             ))}
