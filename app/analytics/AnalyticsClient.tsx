@@ -204,7 +204,7 @@ export default function AnalyticsClient({ complaints }: Props) {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Complaint Analytics & KPIs</h1>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Guest Opportunity Analytics & KPIs</h1>
             <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>Frequency, resolution time, repeat issues, and guest satisfaction — by category, department, and time period.</p>
           </div>
           {/* Period tabs */}
@@ -224,7 +224,7 @@ export default function AnalyticsClient({ complaints }: Props) {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
           {[
             {
-              label: 'Total Complaints',
+              label: 'Total Guest Opportunities',
               value: current.length,
               sub: trendArrow(current.length, previous.length),
               color: current.length > 0 ? 'var(--danger)' : 'var(--success)',
@@ -258,10 +258,10 @@ export default function AnalyticsClient({ complaints }: Props) {
 
         {/* ── Row 1: Frequency ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
-          <Panel title="Complaint Frequency by Category" subtitle={`${current.length} complaints — ${PERIOD_LABELS[period].toLowerCase()}`}>
+          <Panel title="Guest Opportunity Frequency by Category" subtitle={`${current.length} guest opportunities — ${PERIOD_LABELS[period].toLowerCase()}`}>
             <BarChart data={byCat} color="var(--danger)" />
           </Panel>
-          <Panel title="Complaint Frequency by Department" subtitle={`${PERIOD_LABELS[period]} · sorted by volume`}>
+          <Panel title="Guest Opportunity Frequency by Department" subtitle={`${PERIOD_LABELS[period]} · sorted by volume`}>
             <BarChart data={byDept} color="#7C3AED" />
           </Panel>
         </div>
@@ -287,7 +287,7 @@ export default function AnalyticsClient({ complaints }: Props) {
                   );
                 })}
               </div>
-            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No resolved complaints in this period.</p>}
+            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No resolved guest opportunities in this period.</p>}
           </Panel>
 
           <Panel title="Avg. Resolution Time by Department" subtitle="Departments with slowest resolution at top">
@@ -304,7 +304,7 @@ export default function AnalyticsClient({ complaints }: Props) {
         <div style={{ marginBottom: 20 }}>
           <Panel
             title="Repeat Issue Rate"
-            subtitle="Categories with 2+ complaints in the selected period — indicates systemic problems requiring process change"
+            subtitle="Categories with 2+ guest opportunities in the selected period — indicates systemic problems requiring process change"
           >
             {kpis.repeatCats.length === 0 ? (
               <p style={{ color: 'var(--success)', fontSize: 14, fontWeight: 600 }}>✓ No repeat issues in this period.</p>
@@ -339,7 +339,7 @@ export default function AnalyticsClient({ complaints }: Props) {
 
         {/* ── Row 4: Satisfaction ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
-          <Panel title="Post-Resolution Satisfaction by Category" subtitle="Average score (1–5) after complaint resolution">
+          <Panel title="Post-Resolution Satisfaction by Category" subtitle="Average score (1–5) after guest opportunity resolution">
             {satByCat.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {satByCat.map(([cat, avg]) => (
@@ -356,7 +356,7 @@ export default function AnalyticsClient({ complaints }: Props) {
                   </div>
                 ))}
               </div>
-            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No resolved complaints with satisfaction scores in this period.</p>}
+            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No resolved guest opportunities with satisfaction scores in this period.</p>}
           </Panel>
 
           <Panel title="Satisfaction Score Distribution" subtitle="How guests rated their experience after resolution">
@@ -387,15 +387,15 @@ export default function AnalyticsClient({ complaints }: Props) {
                   </span>
                 </div>
               </div>
-            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No satisfaction scores recorded for resolved complaints in this period.</p>}
+            ) : <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>No satisfaction scores recorded for resolved guest opportunities in this period.</p>}
           </Panel>
         </div>
 
         {/* ── Daily Trend (last 30 days) ── */}
-        <Panel title="Daily Complaint Volume — Last 30 Days" subtitle="Each bar = one day. Hover for date.">
+        <Panel title="Daily Guest Opportunity Volume — Last 30 Days" subtitle="Each bar = one day. Hover for date.">
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 80, overflowX: 'auto' }}>
             {dailyTrend.map(({ label, count }) => (
-              <div key={label} title={`${label}: ${count} complaint${count !== 1 ? 's' : ''}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '0 0 auto', width: 24, gap: 3 }}>
+              <div key={label} title={`${label}: ${count} guest opportunit${count !== 1 ? 'ies' : 'y'}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: '0 0 auto', width: 24, gap: 3 }}>
                 <div style={{
                   width: '100%', height: count > 0 ? `${Math.max((count / maxDaily) * 64, 4)}px` : 4,
                   background: count === 0 ? 'var(--border)' : count >= 3 ? 'var(--danger)' : count >= 2 ? '#F59E0B' : 'var(--navy)',

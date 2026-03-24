@@ -116,11 +116,11 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Complaint Database</h1>
-            <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>Full complaint history with lifecycle data — log, resolution, compensation, and guest satisfaction.</p>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Guest Opportunity Database</h1>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>Full guest opportunity history with lifecycle data — log, resolution, compensation, and guest satisfaction.</p>
           </div>
           <a href="/capture" style={{ padding: '9px 18px', background: 'var(--gold)', color: 'var(--navy)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            + Log Complaint
+            + Log Guest Opportunity
           </a>
         </div>
 
@@ -145,7 +145,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search complaints, rooms, guests…"
+            placeholder="Search guest opportunities, rooms, guests…"
             style={{ flex: 1, minWidth: 200, padding: '8px 12px', border: '1.5px solid var(--border)', borderRadius: 7, fontSize: 13, fontFamily: 'inherit' }}
           />
 
@@ -174,7 +174,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
 
           {filtered.length === 0 ? (
             <div style={{ padding: '48px 24px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 14 }}>
-              No complaints match your current filters.
+              No guest opportunities match your current filters.
             </div>
           ) : (
             filtered.map(c => {
@@ -217,7 +217,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                       {/* Left: full complaint + resolution */}
                       <div>
                         <div style={{ marginBottom: 16 }}>
-                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 6 }}>Complaint</div>
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 6 }}>Guest Opportunity</div>
                           <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{c.description}</p>
                         </div>
 
@@ -245,7 +245,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                       <div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
                           {[
-                            { label: 'Complaint ID', value: c.id.slice(0, 8).toUpperCase() },
+                            { label: 'Opportunity ID', value: c.id.slice(0, 8).toUpperCase() },
                             { label: 'Guest ID',     value: c.guest_id ? c.guest_id.slice(0, 8).toUpperCase() : '—' },
                             { label: 'Logged',       value: new Date(c.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) },
                             { label: 'Resolved',     value: c.resolved_at ? new Date(c.resolved_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—' },
@@ -260,7 +260,7 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                         {/* Inline resolve form */}
                         {c.status !== 'resolved' && !resolving && (
                           <button onClick={(e) => { e.stopPropagation(); setResolvingId(c.id); setResolution(''); setCompensation(''); setSatisfaction(null); }} style={{ padding: '9px 18px', border: '1.5px solid var(--success)', color: 'var(--success)', background: 'transparent', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Resolve this complaint</span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Resolve this guest opportunity</span>
                           </button>
                         )}
 

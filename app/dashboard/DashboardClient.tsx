@@ -160,7 +160,7 @@ export default function DashboardClient({
           setOpen(n => n + 1);
           if (c.severity === 'critical' || c.severity === 'high') {
             showAlert(
-              `${c.severity.toUpperCase()} complaint — ${c.department}`,
+              `${c.severity.toUpperCase()} guest opportunity — ${c.department}`,
               c.description,
             );
           }
@@ -225,17 +225,17 @@ export default function DashboardClient({
             Improvements
           </a>
           <a href="/complaints" style={{ padding: '9px 18px', border: '2px solid var(--gold)', color: 'var(--gold-dark)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            All Complaints →
+            All Guest Opportunities →
           </a>
           <a href="/capture" style={{ padding: '9px 18px', background: 'var(--gold)', color: 'var(--navy)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            + Log Complaint
+            + Log Guest Opportunity
           </a>
         </div>
 
         {/* KPI cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 28 }}>
           {[
-            { label: 'Open Complaints',  value: open,     trend: open > 0 ? 'Needs attention' : 'All clear',     color: open > 0 ? 'var(--danger)' : 'var(--success)' },
+            { label: 'Open Guest Opportunities',  value: open,     trend: open > 0 ? 'Needs attention' : 'All clear',     color: open > 0 ? 'var(--danger)' : 'var(--success)' },
             { label: 'Critical / High',  value: criticalCount, trend: criticalCount > 0 ? 'Immediate action' : 'None active', color: criticalCount > 0 ? '#7C3AED' : 'var(--success)' },
             { label: 'Resolved Today',   value: resolved, trend: '↑ live',                                             color: 'var(--navy)' },
             { label: 'AI Insights',      value: isPro ? '3 new' : '—', trend: isPro ? 'View below' : 'Pro plan required', color: isPro ? 'var(--gold-dark)' : 'var(--text-muted)' },
@@ -252,10 +252,10 @@ export default function DashboardClient({
 
           {/* Complaints by department */}
           <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: 'var(--shadow)' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 24 }}>Complaints by Department — Today</h3>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 24 }}>Guest Opportunities by Department — Today</h3>
             {deptCounts.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
-                No complaints logged yet. <a href="/capture" style={{ color: 'var(--gold)' }}>Log the first one →</a>
+                No guest opportunities logged yet. <a href="/capture" style={{ color: 'var(--gold)' }}>Log the first one →</a>
               </p>
             ) : (
               deptCounts.map(d => (
@@ -292,7 +292,7 @@ export default function DashboardClient({
             </div>
 
             {complaints.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>No complaints logged yet today.</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>No guest opportunities logged yet today.</p>
             ) : (
               complaints.map(c => {
                 const sev = SEVERITY_STYLE[c.severity];
@@ -308,7 +308,7 @@ export default function DashboardClient({
                     marginBottom: 12,
                     overflow: 'hidden',
                   }}>
-                    {/* ── Complaint header ── */}
+                    {/* ── Guest Opportunity header ── */}
                     <div style={{ padding: '12px 14px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
@@ -356,7 +356,7 @@ export default function DashboardClient({
                           <textarea
                             value={resolution}
                             onChange={e => setResolution(e.target.value)}
-                            placeholder="How was this complaint resolved?"
+                            placeholder="How was this guest opportunity resolved?"
                             rows={2}
                             style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }}
                           />
@@ -501,7 +501,7 @@ export default function DashboardClient({
                       </div>
                       {hasComplaints && (
                         <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, background: 'rgba(220,38,38,0.1)', color: 'var(--danger)' }}>
-                          {guestComplaints.length} complaint{guestComplaints.length > 1 ? 's' : ''}
+                          {guestComplaints.length} guest opportunit{guestComplaints.length > 1 ? 'ies' : 'y'}
                         </span>
                       )}
                     </div>
@@ -529,7 +529,7 @@ export default function DashboardClient({
           <div style={{ marginTop: 24, background: 'var(--navy)', borderRadius: 12, padding: 32, textAlign: 'center', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}><Sparkles size={22} color="#C9A84C" strokeWidth={1.75} /><span style={{ fontSize: '1.2rem', fontWeight: 700 }}>AI Insights</span></div>
             <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 20, fontSize: 15 }}>
-              Upgrade to Pro to get AI-generated pattern detection, repeat-complaint identification, and prioritized resolution recommendations.
+              Upgrade to Pro to get AI-generated pattern detection, repeat guest opportunity identification, and prioritized resolution recommendations.
             </p>
             <UpgradeToPro />
           </div>

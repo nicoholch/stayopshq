@@ -3,7 +3,7 @@ import ComplaintsClient from './ComplaintsClient';
 import type { Complaint } from '@/types';
 
 export const metadata: Metadata = {
-  title: 'Complaint Database',
+  title: 'Guest Opportunity Database',
   robots: { index: false, follow: false },
 };
 

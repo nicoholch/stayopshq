@@ -139,7 +139,7 @@ export default function CapturePage() {
           <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: 'var(--gold-dark)', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 12 }}>
             Employee App
           </span>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Log a Guest Complaint</h1>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 800 }}>Log a Guest Opportunity</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 8 }}>
             Record the issue immediately so management can act before the guest checks out.
           </p>
@@ -192,7 +192,7 @@ export default function CapturePage() {
                   </select>
                   {selectedGuestId && (
                     <p style={{ fontSize: 11, color: 'var(--success)', marginTop: 5, fontWeight: 600 }}>
-                      <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 4 }} />Complaint will be linked to this guest's record and personalise their follow-up email.
+                      <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 4 }} />Guest opportunity will be linked to this guest's record and personalise their follow-up email.
                     </p>
                   )}
                 </div>
@@ -235,7 +235,7 @@ export default function CapturePage() {
               <textarea
                 value={description}
                 onChange={e => setDescription(e.target.value)}
-                placeholder="Describe the complaint in the guest's own words. Be specific — this goes directly to the manager."
+                placeholder="Describe the guest opportunity in the guest's own words. Be specific — this goes directly to the manager."
                 rows={4}
                 style={{ width: '100%', padding: '13px 16px', border: '2px solid var(--border)', borderRadius: 8, fontSize: 14, fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }}
               />
@@ -273,7 +273,7 @@ export default function CapturePage() {
                 transition: 'opacity 0.2s',
               }}
             >
-              {saving ? 'Logging complaint…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><AlertTriangle size={16} strokeWidth={2} />Log Complaint</span>}
+              {saving ? 'Logging guest opportunity…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}><AlertTriangle size={16} strokeWidth={2} />Log Guest Opportunity</span>}
             </button>
           </div>
         )}
@@ -284,9 +284,9 @@ export default function CapturePage() {
             <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(16,185,129,0.1)', display: 'grid', placeItems: 'center', margin: '0 auto 20px' }}>
               <CheckCircle2 size={36} color="#10B981" strokeWidth={1.75} />
             </div>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 10 }}>Complaint Logged</h2>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 10 }}>Guest Opportunity Logged</h2>
             <p style={{ color: 'var(--text-muted)', marginBottom: 32, maxWidth: 340, margin: '0 auto 32px' }}>
-              Management has been notified. The complaint is now visible on the live dashboard.
+              Management has been notified. The guest opportunity is now visible on the live dashboard.
             </p>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
               <button onClick={reset} style={{ padding: '14px 28px', background: 'var(--gold)', color: 'var(--navy)', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer' }}>

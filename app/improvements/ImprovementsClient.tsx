@@ -213,7 +213,7 @@ export default function ImprovementsClient({ complaints }: Props) {
           priority: count >= 8 ? 'critical' : 'high',
           area: `${dept} — ${cat}`,
           title: `"${cat}" has appeared ${count} times in 90 days`,
-          detail: `This is your highest-frequency complaint category. Repeated occurrences indicate a systemic process failure rather than isolated incidents.`,
+          detail: `This is your highest-frequency guest opportunity category. Repeated occurrences indicate a systemic process failure rather than isolated incidents.`,
           action: `Conduct a full SOP audit for ${dept}. Assign a department lead to own this category with a 30-day improvement target.`,
         });
       }
@@ -235,8 +235,8 @@ export default function ImprovementsClient({ complaints }: Props) {
           priority: avgTime > 12 ? 'critical' : 'high',
           area: dept,
           title: `${dept} avg. resolution time is ${fmtHours(avgTime)}`,
-          detail: `Resolution times above 6 hours suggest complaints are not being escalated or actioned promptly within this department.`,
-          action: `Implement a 2-hour response SLA for ${dept} complaints. Create an on-call escalation path for complaints marked High or Critical.`,
+          detail: `Resolution times above 6 hours suggest guest opportunities are not being escalated or actioned promptly within this department.`,
+          action: `Implement a 2-hour response SLA for ${dept} guest opportunities. Create an on-call escalation path for guest opportunities marked High or Critical.`,
         });
       }
     }
@@ -248,7 +248,7 @@ export default function ImprovementsClient({ complaints }: Props) {
           id: `rec-room-${hotspot.room}`,
           priority: hotspot.count >= 5 ? 'critical' : 'high',
           area: `Room ${hotspot.room}`,
-          title: `Room ${hotspot.room} has generated ${hotspot.count} complaints in 90 days`,
+          title: `Room ${hotspot.room} has generated ${hotspot.count} guest opportunities in 90 days`,
           detail: `Categories: ${hotspot.categories.join(', ')}. Recurring issues in a single room strongly suggest a physical or structural problem that periodic fixes haven't resolved.`,
           action: `Schedule a full room inspection and maintenance review for Room ${hotspot.room}. Consider taking it offline for a full refurbishment.`,
         });
@@ -269,7 +269,7 @@ export default function ImprovementsClient({ complaints }: Props) {
           priority: avgSat < 2.5 ? 'critical' : 'medium',
           area: cat,
           title: `Post-resolution satisfaction for "${cat}" averages ${avgSat.toFixed(1)}/5`,
-          detail: `Guests are not satisfied with how these complaints are being resolved. The issue may be fixed operationally but the recovery experience is falling short.`,
+          detail: `Guests are not satisfied with how these guest opportunities are being resolved. The issue may be fixed operationally but the recovery experience is falling short.`,
           action: `Review your recovery playbook for ${cat}. Train staff on service recovery language and consider more proactive compensation for this category.`,
         });
       }
@@ -282,7 +282,7 @@ export default function ImprovementsClient({ complaints }: Props) {
         priority: 'high',
         area: `${p.dept} — ${p.category}`,
         title: `"${p.category}" in ${p.dept} is getting worse`,
-        detail: `Volume increased from ${p.prev30} to ${p.curr30} complaints in the last 30 days. Without intervention this trend will continue.`,
+        detail: `Volume increased from ${p.prev30} to ${p.curr30} guest opportunities in the last 30 days. Without intervention this trend will continue.`,
         action: `Escalate to ${p.dept} department head. Request a root cause analysis and a written improvement plan within 1 week.`,
       });
     }
@@ -358,12 +358,12 @@ export default function ImprovementsClient({ complaints }: Props) {
           <div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Continuous Improvement</h1>
             <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>
-              Recurring issue detection, period-over-period trend tracking, and operational recommendations derived from complaint patterns.
+              Recurring issue detection, period-over-period trend tracking, and operational recommendations derived from guest opportunity patterns.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
             <a href="/analytics" style={{ padding: '9px 18px', border: '2px solid var(--border)', color: 'var(--text-muted)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>Analytics ↗</a>
-            <a href="/complaints" style={{ padding: '9px 18px', border: '2px solid var(--gold)', color: 'var(--gold-dark)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>All Complaints ↗</a>
+            <a href="/complaints" style={{ padding: '9px 18px', border: '2px solid var(--gold)', color: 'var(--gold-dark)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>All Guest Opportunities ↗</a>
           </div>
         </div>
 
@@ -372,7 +372,7 @@ export default function ImprovementsClient({ complaints }: Props) {
           <div style={{ marginBottom: 16 }}>
             <h2 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 4 }}>Recurring Issue Tracker</h2>
             <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              Every (department × category) combination with 2+ complaints in 90 days, tracked across consecutive 30-day periods.
+              Every (department × category) combination with 2+ guest opportunities in 90 days, tracked across consecutive 30-day periods.
             </p>
           </div>
 
@@ -461,7 +461,7 @@ export default function ImprovementsClient({ complaints }: Props) {
             <div style={{ marginBottom: 16 }}>
               <h2 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 4 }}>Room-Level Hotspots</h2>
               <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-                Rooms generating 2+ complaints in 90 days — indicative of structural or physical issues that require maintenance intervention.
+                Rooms generating 2+ guest opportunities in 90 days — indicative of structural or physical issues that require maintenance intervention.
               </p>
             </div>
             <div style={{ background: 'white', borderRadius: 12, boxShadow: 'var(--shadow)', overflow: 'hidden' }}>
@@ -504,7 +504,7 @@ export default function ImprovementsClient({ complaints }: Props) {
                 <div key={h} style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', textAlign: h === 'Trend' || h === 'Last 30d' || h === 'Prev 30d' ? 'right' : 'left' }}>{h}</div>
               ))}
             </div>
-            <MomRow label="Total Complaints"          data={scorecard.volume}       format={n => `${n}`} />
+            <MomRow label="Total Guest Opportunities"  data={scorecard.volume}       format={n => `${n}`} />
             <MomRow label="Avg. Resolution Time"      data={scorecard.resTime}      format={n => n > 0 ? fmtHours(n) : '—'} />
             <MomRow label="Resolution Rate"           data={scorecard.resRate}      format={n => `${n.toFixed(0)}%`} />
             <MomRow label="Avg. Post-Resolution Sat." data={scorecard.satisfaction} format={n => n > 0 ? `${n.toFixed(1)}/5` : '—'} />
@@ -516,7 +516,7 @@ export default function ImprovementsClient({ complaints }: Props) {
           <div style={{ marginBottom: 16 }}>
             <h2 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 4 }}>Operational Recommendations</h2>
             <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>
-              Auto-generated from complaint patterns — sorted by priority. Each recommendation is derived from observed data, not assumptions.
+              Auto-generated from guest opportunity patterns — sorted by priority. Each recommendation is derived from observed data, not assumptions.
             </p>
           </div>
 
@@ -524,7 +524,7 @@ export default function ImprovementsClient({ complaints }: Props) {
             <div style={{ background: 'white', borderRadius: 12, padding: 32, boxShadow: 'var(--shadow)', textAlign: 'center' }}>
               <div style={{ fontSize: 32, marginBottom: 12 }}>🏆</div>
               <p style={{ fontWeight: 700, fontSize: 15, marginBottom: 6 }}>No recommendations at this time.</p>
-              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Your complaint patterns don't currently indicate any systemic issues requiring action.</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Your guest opportunity patterns don't currently indicate any systemic issues requiring action.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
