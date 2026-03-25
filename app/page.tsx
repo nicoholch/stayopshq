@@ -27,14 +27,14 @@ const FEATURES = [
 
 const TESTIMONIALS = [
   {
-    quote: "We used to run the morning briefing from memory and WhatsApp screenshots. Now we run it from PulseStay. Every issue from the night before is logged, assigned, and either resolved or escalating. It changed how we start every single day.",
+    quote: "We used to run the morning briefing from memory and WhatsApp screenshots. Now we run it from Guest Ops HQ. Every issue from the night before is logged, assigned, and either resolved or escalating. It changed how we start every single day.",
     name: 'James Whitfield',
     title: 'General Manager',
     property: 'Private Island Resort, Indian Ocean',
     stars: 5,
   },
   {
-    quote: "The 30-second logging is real. Our beach staff are not tech people — they log an issue between guest interactions without thinking about it. Before PulseStay we were losing at least three issues per shift to verbal handoffs that never reached management.",
+    quote: "The 30-second logging is real. Our beach staff are not tech people — they log an issue between guest interactions without thinking about it. Before Guest Ops HQ we were losing at least three issues per shift to verbal handoffs that never reached management.",
     name: 'Elena Marchetti',
     title: 'Director of Operations',
     property: 'Boutique Coastal Collection, Amalfi',
@@ -49,7 +49,7 @@ const TESTIMONIALS = [
   },
 ];
 
-const COMPARISON = [
+const COMPARISON: { feature: string; pulsestay: boolean | 'partial'; paper: boolean | 'partial'; spreadsheet: boolean | 'partial'; whatsapp: boolean | 'partial' }[] = [
   { feature: 'Issues logged in under 30 seconds', pulsestay: true,  paper: false, spreadsheet: false, whatsapp: false },
   { feature: 'Real-time manager alerts',           pulsestay: true,  paper: false, spreadsheet: false, whatsapp: 'partial' },
   { feature: 'Severity triage',                    pulsestay: true,  paper: false, spreadsheet: false, whatsapp: false },
@@ -70,12 +70,12 @@ const FAQS = [
     a: 'No. The capture form is four taps and a short description. Staff who have never used it before can log their first issue in under a minute. We designed it specifically for hospitality staff who are on the move.',
   },
   {
-    q: 'What devices does PulseStay work on?',
+    q: 'What devices does Guest Ops HQ work on?',
     a: 'Any device with a browser — iPhone, Android, tablet, or desktop. No app download required. The capture form is optimised for mobile and works on poor connections common in remote resort environments.',
   },
   {
     q: 'Is our guest data secure?',
-    a: 'Yes. All data is encrypted at rest and in transit. PulseStay is built on Supabase, which runs on AWS infrastructure with SOC 2-compliant controls. Guest data is never shared with third parties or used to train AI models.',
+    a: 'Yes. All data is encrypted at rest and in transit. Guest Ops HQ is built on Supabase, which runs on AWS infrastructure with SOC 2-compliant controls. Guest data is never shared with third parties or used to train AI models.',
   },
   {
     q: 'Can I add more departments or staff accounts later?',
@@ -107,19 +107,19 @@ export default function HomePage() {
       }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.45rem', color: 'white', letterSpacing: '-0.02em' }}>
-            <span style={{ width: 36, height: 36, background: '#C9A84C', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
-              <Zap size={18} color="#0D1B2A" strokeWidth={2.5} />
+            <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
+              <Zap size={18} color="#0B1A2B" strokeWidth={2.5} />
             </span>
-            PulseStay
+            Guest Ops HQ
           </div>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
-            <a href="#how-it-works" style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: 500 }}>How It Works</a>
-            <a href="#features"     style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: 500 }}>Features</a>
-            <a href="#pricing"      style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: 500 }}>Pricing</a>
+            <a href="#how-it-works" className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>How It Works</a>
+            <a href="#features"     className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Features</a>
+            <a href="#pricing"      className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Pricing</a>
             <Link href="/dashboard" style={{ padding: '9px 18px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
               Dashboard Demo
             </Link>
-            <a href="/login" style={{ padding: '9px 18px', background: '#C9A84C', color: '#0D1B2A', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+            <a href="/login" className="btn-gold" style={{ padding: '9px 18px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
               Get Started
             </a>
           </div>
@@ -129,56 +129,70 @@ export default function HomePage() {
       {/* ── Hero ── */}
       <section style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #0D1B2A 0%, #162436 50%, #1a2f44 100%)',
+        background: 'linear-gradient(180deg, #0B1A2B 0%, #0F2438 100%)',
         display: 'flex', alignItems: 'center',
         paddingTop: 72, position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 1, backgroundImage: 'linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.07) 0%, transparent 60%)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.06, backgroundImage: 'linear-gradient(rgba(245,196,81,1) 1px, transparent 1px), linear-gradient(90deg, rgba(245,196,81,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 70% 50%, rgba(245,196,81,0.07) 0%, transparent 60%)' }} />
 
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 1, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
           {/* Left: copy */}
           <div>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 24 }}>
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 24 }}>
               Built for 5-Star Resorts
             </span>
-            <h1 style={{ fontSize: 'clamp(2.4rem, 4vw, 3.6rem)', fontWeight: 400, fontFamily: 'var(--font-display)', color: 'white', lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 24 }}>
+            <h1 style={{ fontSize: 'clamp(2.4rem, 4vw, 3.6rem)', fontWeight: 400, fontFamily: 'var(--font-display)', color: 'white', lineHeight: 1.1, letterSpacing: '-0.03em', marginBottom: 32 }}>
               Resolve Every Guest Issue{' '}
-              <span style={{ color: '#C9A84C' }}>Before They Check Out</span>
+              <span style={{ color: '#F5C451' }}>Before They Check Out</span>
             </h1>
-            <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: 40, maxWidth: 520 }}>
+            <p style={{ fontSize: '1.1rem', color: '#B8C5D6', lineHeight: 1.7, marginBottom: 52, maxWidth: 520 }}>
               Staff log any guest issue in 30 seconds. Management sees it instantly and tracks it to resolution — before the guest writes a review.
             </p>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' as const }}>
-              <a href="/login" style={{ padding: '16px 32px', background: '#C9A84C', color: '#0D1B2A', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
+              <a href="/login" className="btn-gold" style={{ padding: '16px 36px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
                 Start Free Trial
               </a>
-              <Link href="/dashboard" style={{ padding: '16px 32px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
+              <Link href="/dashboard" className="btn-ghost" style={{ padding: '16px 32px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
                 View Live Demo
               </Link>
             </div>
-            <div style={{ display: 'flex', gap: 40, marginTop: 48, paddingTop: 40, borderTop: '1px solid rgba(255,255,255,0.1)', flexWrap: 'wrap' as const }}>
-              {[
-                { value: '< 30s',  label: 'To log any issue' },
-                { value: '92%',    label: 'Resolved before checkout' },
-                { value: '4×',     label: 'Fewer negative reviews' },
-              ].map(s => (
-                <div key={s.label}>
-                  <div style={{ fontSize: '2rem', fontWeight: 800, color: '#C9A84C', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.value}</div>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{s.label}</div>
+            <div style={{ marginTop: 52, paddingTop: 40, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              {/* Conversion anchor */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28 }}>
+                <div style={{ position: 'relative' as const }}>
+                  <div style={{ fontSize: 'clamp(3.2rem, 5vw, 4.5rem)', fontWeight: 800, color: '#F5C451', fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', lineHeight: 1, filter: 'drop-shadow(0 0 18px rgba(245,196,81,0.45))' }}>92%</div>
                 </div>
-              ))}
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: 'white', lineHeight: 1.3 }}>of issues resolved<br />before checkout</div>
+                  <div style={{ fontSize: 12, color: '#B8C5D6', marginTop: 4 }}>when logged in Guest Ops HQ</div>
+                </div>
+              </div>
+              {/* Supporting stats */}
+              <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' as const }}>
+                {[
+                  { value: '< 30s', label: 'To log any issue' },
+                  { value: '4×',    label: 'Fewer negative reviews' },
+                ].map(s => (
+                  <div key={s.label}>
+                    <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#F5C451', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}>{s.value}</div>
+                    <div style={{ fontSize: 12, color: '#B8C5D6', marginTop: 2 }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Right: product mockup */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '100%', maxWidth: 420, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.5)' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' as const }}>
+            {/* Glow */}
+            <div style={{ position: 'absolute', inset: '-40px', background: 'radial-gradient(ellipse at 50% 50%, rgba(245,196,81,0.1) 0%, transparent 65%)', pointerEvents: 'none' as const, zIndex: 0 }} />
+            <div style={{ width: '100%', maxWidth: 420, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.5)', position: 'relative' as const, zIndex: 1 }}>
               {/* Mockup header */}
               <div style={{ padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 24, height: 24, background: '#C9A84C', borderRadius: 5, display: 'grid', placeItems: 'center' }}><Zap size={12} color="#0D1B2A" strokeWidth={2.5} /></span>
+                  <span style={{ width: 24, height: 24, background: '#F5C451', borderRadius: 5, display: 'grid', placeItems: 'center' }}><Zap size={12} color="#0B1A2B" strokeWidth={2.5} /></span>
                   <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>Live Dashboard</span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, color: '#10B981' }}>
@@ -210,7 +224,7 @@ export default function HomePage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                       <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                         <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, background: item.sevBg, color: item.sevColor }}>{item.sev}</span>
-                        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>{item.dept}{item.room !== '—' ? ` · Rm ${item.room}` : ''}</span>
+                        <span style={{ fontSize: 11, color: '#B8C5D6' }}>{item.dept}{item.room !== '—' ? ` · Rm ${item.room}` : ''}</span>
                       </div>
                       <span style={{ fontSize: 10, color: item.status === 'resolved' ? '#10B981' : 'rgba(255,255,255,0.3)', fontWeight: item.status === 'resolved' ? 700 : 400 }}>
                         {item.status === 'resolved' ? '✓ Resolved' : item.time}
@@ -221,9 +235,9 @@ export default function HomePage() {
                 ))}
               </div>
               <div style={{ padding: '0 14px 14px' }}>
-                <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 8, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <Bell size={14} color="#C9A84C" strokeWidth={2} />
-                  <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}><strong style={{ color: '#C9A84C' }}>Alert sent</strong> — Critical issue in Room 412 escalated to GM</span>
+                <div style={{ background: 'rgba(245,196,81,0.08)', border: '1px solid rgba(245,196,81,0.2)', borderRadius: 8, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <Bell size={14} color="#F5C451" strokeWidth={2} />
+                  <span style={{ fontSize: 12, color: '#B8C5D6' }}><strong style={{ color: '#F5C451' }}>Alert sent</strong> — Critical issue in Room 412 escalated to GM</span>
                 </div>
               </div>
             </div>
@@ -236,7 +250,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
             <div>
-              <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 20 }}>
+              <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 20 }}>
                 The Problem
               </span>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 20 }}>Guest Issues Get Lost. Then They Go Public.</h2>
@@ -278,7 +292,7 @@ export default function HomePage() {
       {/* ── How It Works ── */}
       <section id="how-it-works" style={{ padding: '96px 0' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', textAlign: 'center' as const }}>
-          <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
+          <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
             How It Works
           </span>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>From Issue to Resolution in Minutes</h2>
@@ -286,12 +300,12 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
               { n: '1', title: 'Guest Reports an Issue',      body: 'A guest mentions a problem to any staff member — at the pool, in the restaurant, or at the front desk.' },
-              { n: '2', title: 'Staff Logs It in 30s',        body: 'The employee opens PulseStay, selects department and category, describes the issue, sets severity, and submits.' },
+              { n: '2', title: 'Staff Logs It in 30s',        body: 'The employee opens Guest Ops HQ, selects department and category, describes the issue, sets severity, and submits.' },
               { n: '3', title: 'Manager Is Alerted Instantly', body: 'High and critical issues trigger a real-time alert. The issue appears live on the dashboard within seconds.' },
               { n: '4', title: 'Issue Tracked to Resolution', body: 'Management assigns, marks in progress, and closes it when resolved — all before the guest checks out.' },
             ].map(step => (
               <div key={step.n} style={{ textAlign: 'center' as const }}>
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#C9A84C', color: '#0D1B2A', fontWeight: 800, fontSize: '1.2rem', display: 'grid', placeItems: 'center', margin: '0 auto 24px', boxShadow: '0 4px 16px rgba(201,168,76,0.4)' }}>{step.n}</div>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#F5C451', color: '#0B1A2B', fontWeight: 800, fontSize: '1.2rem', display: 'grid', placeItems: 'center', margin: '0 auto 24px', boxShadow: '0 4px 16px rgba(245,196,81,0.4)' }}>{step.n}</div>
                 <h4 style={{ fontWeight: 700, marginBottom: 10 }}>{step.title}</h4>
                 <p style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.6 }}>{step.body}</p>
               </div>
@@ -304,7 +318,7 @@ export default function HomePage() {
       <section id="features" style={{ padding: '96px 0', background: '#F8F6F2' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 64 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
               Platform Features
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Everything You Need to Close Every Issue</h2>
@@ -313,8 +327,8 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {FEATURES.map(f => (
               <div key={f.title} style={{ background: 'white', borderRadius: 12, padding: '32px 28px', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
-                <div style={{ width: 52, height: 52, borderRadius: 12, background: 'rgba(201,168,76,0.1)', display: 'grid', placeItems: 'center', marginBottom: 20 }}>
-                  <f.Icon size={22} color="#9A7A2E" strokeWidth={1.75} />
+                <div style={{ width: 52, height: 52, borderRadius: 12, background: 'rgba(245,196,81,0.1)', display: 'grid', placeItems: 'center', marginBottom: 20 }}>
+                  <f.Icon size={22} color="#C49B28" strokeWidth={1.75} />
                 </div>
                 <h4 style={{ fontWeight: 700, marginBottom: 10 }}>{f.title}</h4>
                 <p style={{ fontSize: 14, color: '#6B7280', lineHeight: 1.7 }}>{f.body}</p>
@@ -325,27 +339,27 @@ export default function HomePage() {
       </section>
 
       {/* ── Testimonials ── */}
-      <section style={{ padding: '96px 0', background: '#0D1B2A' }}>
+      <section style={{ padding: '96px 0', background: 'linear-gradient(180deg, #0B1A2B 0%, #0F2438 100%)' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#C9A84C', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#F5C451', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
               Early Access
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>What Hospitality Leaders Are Saying</h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem' }}>From GMs and operations directors who ran the pilot programme.</p>
+            <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>From GMs and operations directors who ran the pilot programme.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {TESTIMONIALS.map(t => (
               <div key={t.name} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 32, display: 'flex', flexDirection: 'column' as const, gap: 24 }}>
                 <div style={{ display: 'flex', gap: 4 }}>
                   {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} size={16} color="#C9A84C" fill="#C9A84C" strokeWidth={0} />
+                    <Star key={i} size={16} color="#F5C451" fill="#F5C451" strokeWidth={0} />
                   ))}
                 </div>
                 <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, fontStyle: 'italic', flexGrow: 1 }}>"{t.quote}"</p>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
                   <div style={{ fontWeight: 700, color: 'white', fontSize: 14 }}>{t.name}</div>
-                  <div style={{ fontSize: 13, color: '#C9A84C', marginTop: 2 }}>{t.title}</div>
+                  <div style={{ fontSize: 13, color: '#F5C451', marginTop: 2 }}>{t.title}</div>
                   <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>{t.property}</div>
                 </div>
               </div>
@@ -358,18 +372,18 @@ export default function HomePage() {
       <section style={{ padding: '96px 0', background: '#F8F6F2' }}>
         <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
-              Why PulseStay
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
+              Why Guest Ops HQ
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Built for This. Not Bolted On.</h2>
             <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 520, margin: '0 auto' }}>Most hotels track issues with paper, spreadsheets, or WhatsApp. Here is how that compares.</p>
           </div>
           <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 40px rgba(0,0,0,0.08)' }}>
             {/* Table header */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', background: '#0D1B2A', padding: '16px 24px' }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Feature</div>
-              {['PulseStay', 'Paper / Verbal', 'Spreadsheet', 'WhatsApp'].map(col => (
-                <div key={col} style={{ fontSize: 12, fontWeight: 700, color: col === 'PulseStay' ? '#C9A84C' : 'rgba(255,255,255,0.5)', textAlign: 'center' as const, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{col}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', background: '#0B1A2B', padding: '16px 24px' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#B8C5D6', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Feature</div>
+              {['Guest Ops HQ', 'Paper / Verbal', 'Spreadsheet', 'WhatsApp'].map(col => (
+                <div key={col} style={{ fontSize: 12, fontWeight: 700, color: col === 'Guest Ops HQ' ? '#F5C451' : 'rgba(255,255,255,0.5)', textAlign: 'center' as const, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{col}</div>
               ))}
             </div>
             {COMPARISON.map((row, i) => (
@@ -389,52 +403,52 @@ export default function HomePage() {
       </section>
 
       {/* ── Pricing ── */}
-      <section id="pricing" style={{ padding: '96px 0', background: '#0D1B2A' }}>
+      <section id="pricing" style={{ padding: '96px 0', background: '#0B1A2B' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#C9A84C', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#F5C451', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
               Simple Pricing
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>Start Resolving Issues in Minutes</h2>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. 14-day free trial on all plans.</p>
+            <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. 14-day free trial on all plans.</p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
             {[
               {
                 name: 'Starter', price: '$149', period: 'per month / per property', featured: false,
                 features: ['Up to 3 departments', 'Real-time issue logging', 'Live management dashboard', 'Severity triage', 'Up to 5 staff accounts'],
-                cta: 'Get Started Free', ctaStyle: { border: '2px solid #C9A84C', color: '#C9A84C', background: 'transparent' },
+                cta: 'Get Started Free', ctaStyle: { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' },
               },
               {
                 name: 'Pro', price: '$349', period: 'per month / per property', featured: true,
                 features: ['Unlimited departments', 'AI pattern detection', 'Instant alert system', 'Issue assignment', 'Up to 25 staff accounts', 'Priority support'],
-                cta: 'Start 14-Day Trial', ctaStyle: { background: '#0D1B2A', color: 'white', border: 'none' },
+                cta: 'Start 14-Day Trial', ctaStyle: { background: '#0B1A2B', color: 'white', border: 'none' },
               },
               {
                 name: 'Enterprise', price: 'Custom', period: 'multi-property / chain', featured: false,
                 features: ['Unlimited properties', 'Cross-property benchmarking', 'Custom AI fine-tuning', 'PMS / POS integrations', 'Dedicated success manager', 'White-label option'],
-                cta: 'Talk to Sales', ctaStyle: { border: '2px solid #C9A84C', color: '#C9A84C', background: 'transparent' },
+                cta: 'Talk to Sales', ctaStyle: { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' },
               },
             ].map(plan => (
-              <div key={plan.name} style={{ background: plan.featured ? '#C9A84C' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#C9A84C' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 36, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
+              <div key={plan.name} style={{ background: plan.featured ? '#F5C451' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#F5C451' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 36, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
                 {plan.featured && (
-                  <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#0D1B2A', color: '#C9A84C', fontSize: 11, fontWeight: 700, padding: '4px 14px', borderRadius: 999, border: '1px solid #C9A84C', whiteSpace: 'nowrap' as const }}>
+                  <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#0B1A2B', color: '#F5C451', fontSize: 11, fontWeight: 700, padding: '4px 14px', borderRadius: 999, border: '1px solid #F5C451', whiteSpace: 'nowrap' as const }}>
                     Most Popular
                   </span>
                 )}
                 <div style={{ fontSize: 13, fontWeight: 600, color: plan.featured ? 'rgba(13,27,42,0.6)' : 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 16 }}>{plan.name}</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: plan.featured ? '#0D1B2A' : 'white' }}>{plan.price}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: plan.featured ? '#0B1A2B' : 'white' }}>{plan.price}</div>
                 <div style={{ fontSize: 13, color: plan.featured ? 'rgba(13,27,42,0.5)' : 'rgba(255,255,255,0.4)', marginBottom: 28 }}>{plan.period}</div>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' as const, gap: 12, marginBottom: 32 }}>
                   {plan.features.map(f => (
-                    <li key={f} style={{ display: 'flex', gap: 10, fontSize: 14, color: plan.featured ? '#0D1B2A' : 'rgba(255,255,255,0.75)', alignItems: 'flex-start' }}>
-                      <Check size={15} color={plan.featured ? '#0D1B2A' : '#10B981'} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <li key={f} style={{ display: 'flex', gap: 10, fontSize: 14, color: plan.featured ? '#0B1A2B' : 'rgba(255,255,255,0.75)', alignItems: 'flex-start' }}>
+                      <Check size={15} color={plan.featured ? '#0B1A2B' : '#10B981'} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
                       {f}
                     </li>
                   ))}
                 </ul>
                 {plan.name === 'Enterprise' ? (
-                  <a href="mailto:hello@pulsestay.com" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>{plan.cta}</a>
+                  <a href="mailto:hello@guestopshq.com" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>{plan.cta}</a>
                 ) : (
                   <a href="/login" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>{plan.cta}</a>
                 )}
@@ -448,7 +462,7 @@ export default function HomePage() {
       <section style={{ padding: '96px 0', background: '#F8F6F2' }}>
         <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(201,168,76,0.15)', color: '#9A7A2E', border: '1px solid rgba(201,168,76,0.3)', marginBottom: 16 }}>
+            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
               FAQ
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Common Questions</h2>
@@ -459,7 +473,7 @@ export default function HomePage() {
               <details key={i} style={{ background: 'white', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
                 <summary style={{ padding: '20px 24px', fontWeight: 700, fontSize: 15, cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' as const }}>
                   {faq.q}
-                  <span style={{ fontSize: 20, color: '#C9A84C', flexShrink: 0, marginLeft: 16 }}>+</span>
+                  <span style={{ fontSize: 20, color: '#F5C451', flexShrink: 0, marginLeft: 16 }}>+</span>
                 </summary>
                 <div style={{ padding: '0 24px 20px', color: '#6B7280', fontSize: 15, lineHeight: 1.75 }}>
                   {faq.a}
@@ -471,17 +485,17 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA ── */}
-      <section style={{ padding: '96px 0', background: '#162436', textAlign: 'center' as const }}>
+      <section style={{ padding: '96px 0', background: 'linear-gradient(180deg, #0F2438 0%, #0B1A2B 100%)', textAlign: 'center' as const }}>
         <div style={{ maxWidth: 700, margin: '0 auto', padding: '0 24px' }}>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 20 }}>
             Stop Letting Guest Issues{' '}
-            <span style={{ color: '#C9A84C' }}>Turn Into Bad Reviews</span>
+            <span style={{ color: '#F5C451' }}>Turn Into Bad Reviews</span>
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '1.05rem', marginBottom: 40 }}>
+          <p style={{ color: '#B8C5D6', fontSize: '1.05rem', marginBottom: 40 }}>
             Give your team the tools to capture every issue in real time — and give your managers the clarity to fix them before the guest checks out.
           </p>
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' as const }}>
-            <a href="/login" style={{ padding: '16px 32px', background: '#C9A84C', color: '#0D1B2A', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
+            <a href="/login" className="btn-gold" style={{ padding: '16px 32px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
               Start Free Trial
             </a>
             <Link href="/dashboard" style={{ padding: '16px 32px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
@@ -499,10 +513,10 @@ export default function HomePage() {
             {/* Brand */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.2rem', color: 'white', letterSpacing: '-0.02em', marginBottom: 16 }}>
-                <span style={{ width: 30, height: 30, background: '#C9A84C', borderRadius: 6, display: 'grid', placeItems: 'center' }}>
-                  <Zap size={15} color="#0D1B2A" strokeWidth={2.5} />
+                <span style={{ width: 30, height: 30, background: '#F5C451', borderRadius: 6, display: 'grid', placeItems: 'center' }}>
+                  <Zap size={15} color="#0B1A2B" strokeWidth={2.5} />
                 </span>
-                PulseStay
+                Guest Ops HQ
               </div>
               <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', lineHeight: 1.7, maxWidth: 280 }}>
                 Real-time guest issue management for luxury hotels and resorts. Log it, track it, close it — before checkout.
@@ -532,7 +546,7 @@ export default function HomePage() {
                   { label: 'About',   href: '#' },
                   { label: 'Blog',    href: '#' },
                   { label: 'Careers', href: '#' },
-                  { label: 'Contact', href: 'mailto:hello@pulsestay.com' },
+                  { label: 'Contact', href: 'mailto:hello@guestopshq.com' },
                 ].map(l => (
                   <a key={l.label} href={l.href} style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>{l.label}</a>
                 ))}
@@ -556,7 +570,7 @@ export default function HomePage() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' as const, gap: 12 }}>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>© 2026 PulseStay Inc. All rights reserved.</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>© 2026 Guest Ops HQ Inc. All rights reserved.</p>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>Built for luxury hospitality · Powered by real-time data</p>
           </div>
         </div>

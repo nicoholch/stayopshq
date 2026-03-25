@@ -48,14 +48,14 @@ function LoginForm() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0D1B2A 0%, #162436 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #0B1A2B 0%, #162436 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ width: '100%', maxWidth: 420 }}>
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
-            <span style={{ width: 40, height: 40, background: '#C9A84C', borderRadius: 10, display: 'grid', placeItems: 'center' }}><Zap size={20} color="#0D1B2A" strokeWidth={2.5} /></span>
-            PulseStay
+            <span style={{ width: 40, height: 40, background: '#F5C451', borderRadius: 10, display: 'grid', placeItems: 'center' }}><Zap size={20} color="#0B1A2B" strokeWidth={2.5} /></span>
+            Guest Ops HQ
           </Link>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, marginTop: 12 }}>
             {mode === 'login' ? 'Sign in to your hotel account' : 'Create your hotel account'}
@@ -70,8 +70,8 @@ function LoginForm() {
             {(['login', 'signup'] as const).map(m => (
               <button key={m} onClick={() => { setMode(m); setError(''); setSuccess(''); }} style={{
                 flex: 1, padding: '8px', borderRadius: 6, border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
-                background: mode === m ? '#C9A84C' : 'transparent',
-                color: mode === m ? '#0D1B2A' : 'rgba(255,255,255,0.5)',
+                background: mode === m ? '#F5C451' : 'transparent',
+                color: mode === m ? '#0B1A2B' : 'rgba(255,255,255,0.5)',
                 transition: 'all 0.2s',
               }}>
                 {m === 'login' ? 'Sign In' : 'Sign Up'}
@@ -114,7 +114,7 @@ function LoginForm() {
             </div>
             <button
               type="submit" disabled={loading}
-              style={{ marginTop: 8, padding: '14px', background: '#C9A84C', color: '#0D1B2A', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
+              style={{ marginTop: 8, padding: '14px', background: '#F5C451', color: '#0B1A2B', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1 }}
             >
               {loading ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
@@ -123,9 +123,9 @@ function LoginForm() {
           {/* Demo notice */}
           <div style={{ marginTop: 24, padding: '14px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 8, textAlign: 'center' }}>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-              <strong style={{ color: '#C9A84C' }}>Demo mode:</strong> Auth requires Supabase to be configured.<br />
-              <Link href="/dashboard" style={{ color: '#C9A84C', fontWeight: 600 }}>View dashboard demo →</Link> or{' '}
-              <Link href="/capture" style={{ color: '#C9A84C', fontWeight: 600 }}>try the capture app →</Link>
+              <strong style={{ color: '#F5C451' }}>Demo mode:</strong> Auth requires Supabase to be configured.<br />
+              <Link href="/dashboard" style={{ color: '#F5C451', fontWeight: 600 }}>View dashboard demo →</Link> or{' '}
+              <Link href="/capture" style={{ color: '#F5C451', fontWeight: 600 }}>try the capture app →</Link>
             </p>
           </div>
         </div>
@@ -140,7 +140,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0D1B2A' }} />}>
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0B1A2B' }} />}>
       <LoginForm />
     </Suspense>
   );

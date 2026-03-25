@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     : buildStandardEmail({ guest, hotelName });
 
   const { error: emailErr } = await getResend().emails.send({
-    from: `${hotelName} <noreply@pulsestay.com>`,
+    from: `${hotelName} <noreply@guestopshq.com>`,
     to:   guest.email,
     subject,
     html,
@@ -87,7 +87,7 @@ function buildStandardEmail({ guest, hotelName }: EmailParams): string {
       helps fellow travellers make confident decisions.
     </p>
     <div style="text-align:center;margin:32px 0;">
-      <a href="https://www.tripadvisor.com" style="display:inline-block;padding:16px 36px;background:#C9A84C;color:#0D1B2A;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;">
+      <a href="https://www.tripadvisor.com" style="display:inline-block;padding:16px 36px;background:#F5C451;color:#0B1A2B;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;">
         Share Your Experience
       </a>
     </div>
@@ -147,7 +147,7 @@ function buildComplaintEmail({ guest, hotelName, complaints, resolvedComplaints,
       you taking two minutes to share your experience.
     </p>
     <div style="text-align:center;margin:32px 0;">
-      <a href="https://www.tripadvisor.com" style="display:inline-block;padding:16px 36px;background:#C9A84C;color:#0D1B2A;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;">
+      <a href="https://www.tripadvisor.com" style="display:inline-block;padding:16px 36px;background:#F5C451;color:#0B1A2B;border-radius:8px;font-weight:700;font-size:15px;text-decoration:none;">
         Share Your Honest Experience
       </a>
     </div>
@@ -166,22 +166,22 @@ function emailWrapper(hotelName: string, body: string): string {
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
         <!-- Header -->
-        <tr><td style="background:#0D1B2A;border-radius:12px 12px 0 0;padding:32px 40px;text-align:center;">
+        <tr><td style="background:#0B1A2B;border-radius:12px 12px 0 0;padding:32px 40px;text-align:center;">
           <div style="display:inline-flex;align-items:center;gap:10px;">
-            <span style="display:inline-block;width:34px;height:34px;background:#C9A84C;border-radius:7px;font-size:16px;line-height:34px;text-align:center;">⚡</span>
+            <span style="display:inline-block;width:34px;height:34px;background:#F5C451;border-radius:7px;font-size:16px;line-height:34px;text-align:center;">⚡</span>
             <span style="font-size:20px;font-weight:800;color:white;">${hotelName}</span>
           </div>
         </td></tr>
 
         <!-- Gold bar -->
-        <tr><td style="background:#C9A84C;height:4px;"></td></tr>
+        <tr><td style="background:#F5C451;height:4px;"></td></tr>
 
         <!-- Body -->
         <tr><td style="background:white;padding:40px;border-radius:0 0 12px 12px;">
           ${body}
           <hr style="border:none;border-top:1px solid #E5E7EB;margin:36px 0 24px;">
           <p style="font-size:12px;color:#9CA3AF;text-align:center;line-height:1.6;margin:0;">
-            This email was sent by ${hotelName} via PulseStay.<br>
+            This email was sent by ${hotelName} via Guest Ops HQ.<br>
             You received this because you recently stayed with us.
           </p>
         </td></tr>

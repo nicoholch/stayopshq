@@ -188,15 +188,15 @@ export default function DashboardClient({
 
       {/* Demo mode banner */}
       {isDemo && (
-        <div style={{ background: '#162436', borderBottom: '1px solid rgba(201,168,76,0.3)', color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: '10px 24px', fontSize: '13px' }}>
-          <Info size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} /><strong style={{ color: '#C9A84C' }}>Demo mode</strong> — showing sample data.{' '}
-          <a href="/login" style={{ color: '#C9A84C', fontWeight: 600 }}>Sign up or connect Supabase</a> to see live data.
+        <div style={{ background: '#162436', borderBottom: '1px solid rgba(245,196,81,0.3)', color: 'rgba(255,255,255,0.7)', textAlign: 'center', padding: '10px 24px', fontSize: '13px' }}>
+          <Info size={14} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} /><strong style={{ color: '#F5C451' }}>Demo mode</strong> — showing sample data.{' '}
+          <a href="/login" style={{ color: '#F5C451', fontWeight: 600 }}>Sign up or connect Supabase</a> to see live data.
         </div>
       )}
 
       {showBanner && (
         <div style={{ background: 'var(--success)', color: 'white', textAlign: 'center', padding: '12px', fontSize: '14px', fontWeight: 600 }}>
-          Welcome to PulseStay {hotel.plan}! Your 14-day trial has started.
+          Welcome to Guest Ops HQ {hotel.plan}! Your 14-day trial has started.
           <button onClick={() => setShowBanner(false)} style={{ marginLeft: 16, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: 18 }}>×</button>
         </div>
       )}
@@ -213,7 +213,7 @@ export default function DashboardClient({
               {hotel.name} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} ·{' '}
               <span style={{ color: 'var(--success)', fontWeight: 600 }}>● Live</span>
               {' '}·{' '}
-              <span style={{ textTransform: 'capitalize', background: 'rgba(201,168,76,0.15)', color: 'var(--gold-dark)', padding: '2px 8px', borderRadius: 4, fontSize: 12, fontWeight: 700 }}>
+              <span style={{ textTransform: 'capitalize', background: 'rgba(245,196,81,0.15)', color: 'var(--gold-dark)', padding: '2px 8px', borderRadius: 4, fontSize: 12, fontWeight: 700 }}>
                 {hotel.plan} plan
               </span>
             </p>
@@ -240,7 +240,7 @@ export default function DashboardClient({
             { label: 'Resolved Today',   value: resolved, trend: '↑ live',                                             color: 'var(--navy)' },
             { label: 'AI Insights',      value: isPro ? '3 new' : '—', trend: isPro ? 'View below' : 'Pro plan required', color: isPro ? 'var(--gold-dark)' : 'var(--text-muted)' },
           ].map(k => (
-            <div key={k.label} style={{ background: 'white', borderRadius: 12, padding: 24, boxShadow: 'var(--shadow)' }}>
+            <div key={k.label} style={{ background: 'white', borderRadius: 16, padding: 24, boxShadow: 'var(--shadow)' }}>
               <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500, marginBottom: 8 }}>{k.label}</div>
               <div style={{ fontSize: '2rem', fontWeight: 800, color: k.color }}>{k.value}</div>
               <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>{k.trend}</div>
@@ -251,7 +251,7 @@ export default function DashboardClient({
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: 24 }}>
 
           {/* Complaints by department */}
-          <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: 'var(--shadow)' }}>
+          <div style={{ background: 'white', borderRadius: 16, padding: 28, boxShadow: 'var(--shadow)' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: 24 }}>Guest Opportunities by Department — Today</h3>
             {deptCounts.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: 14 }}>
@@ -282,7 +282,7 @@ export default function DashboardClient({
           </div>
 
           {/* Live complaint feed */}
-          <div style={{ background: 'white', borderRadius: 12, padding: 28, boxShadow: 'var(--shadow)', maxHeight: 600, overflowY: 'auto' }}>
+          <div style={{ background: 'white', borderRadius: 16, padding: 28, boxShadow: 'var(--shadow)', maxHeight: 600, overflowY: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h3 style={{ fontSize: '1rem', fontWeight: 700 }}>Live Feed</h3>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 700, color: 'var(--success)' }}>
@@ -382,7 +382,7 @@ export default function DashboardClient({
                               <button key={n} onClick={() => setSatisfaction(n)} title={SAT_LABELS[n]} style={{
                                 flex: 1, padding: '7px 0', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer',
                                 border: `2px solid ${satisfaction === n ? 'var(--gold)' : 'var(--border)'}`,
-                                background: satisfaction === n ? 'rgba(201,168,76,0.15)' : 'transparent',
+                                background: satisfaction === n ? 'rgba(245,196,81,0.15)' : 'transparent',
                                 color: satisfaction === n ? 'var(--gold-dark)' : 'var(--text-muted)',
                                 transition: 'all 0.15s',
                               }}>
@@ -436,7 +436,7 @@ export default function DashboardClient({
         </div>
 
         {/* ── Guests & Follow-up Emails ── */}
-        <div style={{ marginTop: 24, background: 'white', borderRadius: 12, padding: 28, boxShadow: 'var(--shadow)' }}>
+        <div style={{ marginTop: 24, background: 'white', borderRadius: 16, padding: 28, boxShadow: 'var(--shadow)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
               <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Guest Stay Tracker</h3>
@@ -527,7 +527,7 @@ export default function DashboardClient({
         {/* Pro gate: AI Insights */}
         {!isPro && (
           <div style={{ marginTop: 24, background: 'var(--navy)', borderRadius: 12, padding: 32, textAlign: 'center', color: 'white' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}><Sparkles size={22} color="#C9A84C" strokeWidth={1.75} /><span style={{ fontSize: '1.2rem', fontWeight: 700 }}>AI Insights</span></div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}><Sparkles size={22} color="#F5C451" strokeWidth={1.75} /><span style={{ fontSize: '1.2rem', fontWeight: 700 }}>AI Insights</span></div>
             <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 20, fontSize: 15 }}>
               Upgrade to Pro to get AI-generated pattern detection, repeat guest opportunity identification, and prioritized resolution recommendations.
             </p>
