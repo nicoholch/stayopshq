@@ -10,8 +10,8 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '500', '
 export const metadata: Metadata = {
   // Core
   title: {
-    default: 'Guest Ops HQ — Real-Time Guest Feedback for 5-Star Hotels',
-    template: '%s | Guest Ops HQ',
+    default: 'StayOps HQ — Real-Time Guest Feedback for 5-Star Hotels',
+    template: '%s | StayOps HQ',
   },
   description:
     'Capture guest feedback in real time — during the stay, not after. Triple your feedback conversion rate and surface actionable insights with AI-powered analysis.',
@@ -22,17 +22,17 @@ export const metadata: Metadata = {
   // Open Graph — controls how links look when shared on Slack, LinkedIn, iMessage, etc.
   openGraph: {
     type: 'website',
-    siteName: 'Guest Ops HQ',
-    title: 'Guest Ops HQ — Real-Time Guest Feedback for 5-Star Hotels',
+    siteName: 'StayOps HQ',
+    title: 'StayOps HQ — Real-Time Guest Feedback for 5-Star Hotels',
     description:
-      'Most hotels capture only 10% of guest feedback. Guest Ops HQ captures 30%+ by meeting guests in the moment.',
+      'Most hotels capture only 10% of guest feedback. StayOps HQ captures 30%+ by meeting guests in the moment.',
     url: '/',
     images: [
       {
         url: '/og-image.png',   // 1200×630px image in /public folder
         width: 1200,
         height: 630,
-        alt: 'Guest Ops HQ dashboard showing live guest feedback',
+        alt: 'StayOps HQ dashboard showing live guest feedback',
       },
     ],
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   // Twitter / X card
   twitter: {
     card: 'summary_large_image',
-    title: 'Guest Ops HQ — Real-Time Guest Feedback',
+    title: 'StayOps HQ — Real-Time Guest Feedback',
     description: 'Triple your hotel feedback conversion rate with in-stay capture.',
     images: ['/og-image.png'],
   },

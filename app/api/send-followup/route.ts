@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     : buildStandardEmail({ guest, hotelName });
 
   const { error: emailErr } = await getResend().emails.send({
-    from: `${hotelName} <noreply@guestopshq.com>`,
+    from: `${hotelName} <noreply@stayopshq.com>`,
     to:   guest.email,
     subject,
     html,

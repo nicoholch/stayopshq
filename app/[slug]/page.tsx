@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: `${hotel.name} — Live Guest Satisfaction`,
-    description: `See real-time guest satisfaction scores for ${hotel.name}. Feedback captured during stays — not weeks later. Powered by Guest Ops HQ.`,
+    description: `See real-time guest satisfaction scores for ${hotel.name}. Feedback captured during stays — not weeks later. Powered by StayOps HQ.`,
     openGraph: {
       title: `${hotel.name} — Real-Time Guest Reviews`,
       description: `Live satisfaction scores from current guests at ${hotel.name}.`,

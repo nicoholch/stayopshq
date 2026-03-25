@@ -8,7 +8,7 @@ import { MetadataRoute } from 'next';
 import { createAdminClient } from '@/lib/supabase/admin';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://guestopshq.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stayopshq.com';
 
   // Static marketing pages
   const staticRoutes: MetadataRoute.Sitemap = [

@@ -195,7 +195,7 @@ export default function PublicPageClient({ hotel, deptScores, initialReviews, to
           <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, marginBottom: 16 }}>This sentiment page is powered by</p>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white' }}>
             <span style={{ width: 32, height: 32, background: 'var(--gold)', borderRadius: 7, display: 'grid', placeItems: 'center', fontSize: 16 }}>⚡</span>
-            Guest Ops HQ
+            StayOps HQ
           </a>
           <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 13, marginTop: 12 }}>Real-time in-stay feedback capture for luxury hospitality</p>
           <a href="/#pricing" style={{ display: 'inline-block', marginTop: 20, padding: '12px 28px', background: 'var(--gold)', color: 'var(--navy)', borderRadius: 8, fontWeight: 700, fontSize: 14 }}>

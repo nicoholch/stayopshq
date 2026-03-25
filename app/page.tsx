@@ -27,14 +27,14 @@ const FEATURES = [
 
 const TESTIMONIALS = [
   {
-    quote: "We used to run the morning briefing from memory and WhatsApp screenshots. Now we run it from Guest Ops HQ. Every issue from the night before is logged, assigned, and either resolved or escalating. It changed how we start every single day.",
+    quote: "We used to run the morning briefing from memory and WhatsApp screenshots. Now we run it from StayOps HQ. Every issue from the night before is logged, assigned, and either resolved or escalating. It changed how we start every single day.",
     name: 'James Whitfield',
     title: 'General Manager',
     property: 'Private Island Resort, Indian Ocean',
     stars: 5,
   },
   {
-    quote: "The 30-second logging is real. Our beach staff are not tech people — they log an issue between guest interactions without thinking about it. Before Guest Ops HQ we were losing at least three issues per shift to verbal handoffs that never reached management.",
+    quote: "The 30-second logging is real. Our beach staff are not tech people — they log an issue between guest interactions without thinking about it. Before StayOps HQ we were losing at least three issues per shift to verbal handoffs that never reached management.",
     name: 'Elena Marchetti',
     title: 'Director of Operations',
     property: 'Boutique Coastal Collection, Amalfi',
@@ -70,12 +70,12 @@ const FAQS = [
     a: 'No. The capture form is four taps and a short description. Staff who have never used it before can log their first issue in under a minute. We designed it specifically for hospitality staff who are on the move.',
   },
   {
-    q: 'What devices does Guest Ops HQ work on?',
+    q: 'What devices does StayOps HQ work on?',
     a: 'Any device with a browser — iPhone, Android, tablet, or desktop. No app download required. The capture form is optimised for mobile and works on poor connections common in remote resort environments.',
   },
   {
     q: 'Is our guest data secure?',
-    a: 'Yes. All data is encrypted at rest and in transit. Guest Ops HQ is built on Supabase, which runs on AWS infrastructure with SOC 2-compliant controls. Guest data is never shared with third parties or used to train AI models.',
+    a: 'Yes. All data is encrypted at rest and in transit. StayOps HQ is built on Supabase, which runs on AWS infrastructure with SOC 2-compliant controls. Guest data is never shared with third parties or used to train AI models.',
   },
   {
     q: 'Can I add more departments or staff accounts later?',
@@ -110,7 +110,7 @@ export default function HomePage() {
             <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
               <Zap size={18} color="#0B1A2B" strokeWidth={2.5} />
             </span>
-            Guest Ops HQ
+            StayOps HQ
           </div>
           <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
             <a href="#how-it-works" className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>How It Works</a>
@@ -166,7 +166,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: 'white', lineHeight: 1.3 }}>of issues resolved<br />before checkout</div>
-                  <div style={{ fontSize: 12, color: '#B8C5D6', marginTop: 4 }}>when logged in Guest Ops HQ</div>
+                  <div style={{ fontSize: 12, color: '#B8C5D6', marginTop: 4 }}>when logged in StayOps HQ</div>
                 </div>
               </div>
               {/* Supporting stats */}
@@ -300,7 +300,7 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
               { n: '1', title: 'Guest Reports an Issue',      body: 'A guest mentions a problem to any staff member — at the pool, in the restaurant, or at the front desk.' },
-              { n: '2', title: 'Staff Logs It in 30s',        body: 'The employee opens Guest Ops HQ, selects department and category, describes the issue, sets severity, and submits.' },
+              { n: '2', title: 'Staff Logs It in 30s',        body: 'The employee opens StayOps HQ, selects department and category, describes the issue, sets severity, and submits.' },
               { n: '3', title: 'Manager Is Alerted Instantly', body: 'High and critical issues trigger a real-time alert. The issue appears live on the dashboard within seconds.' },
               { n: '4', title: 'Issue Tracked to Resolution', body: 'Management assigns, marks in progress, and closes it when resolved — all before the guest checks out.' },
             ].map(step => (
@@ -373,7 +373,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 24px' }}>
           <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
             <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
-              Why Guest Ops HQ
+              Why StayOps HQ
             </span>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Built for This. Not Bolted On.</h2>
             <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 520, margin: '0 auto' }}>Most hotels track issues with paper, spreadsheets, or WhatsApp. Here is how that compares.</p>
@@ -382,8 +382,8 @@ export default function HomePage() {
             {/* Table header */}
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', background: '#0B1A2B', padding: '16px 24px' }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#B8C5D6', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Feature</div>
-              {['Guest Ops HQ', 'Paper / Verbal', 'Spreadsheet', 'WhatsApp'].map(col => (
-                <div key={col} style={{ fontSize: 12, fontWeight: 700, color: col === 'Guest Ops HQ' ? '#F5C451' : 'rgba(255,255,255,0.5)', textAlign: 'center' as const, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{col}</div>
+              {['StayOps HQ', 'Paper / Verbal', 'Spreadsheet', 'WhatsApp'].map(col => (
+                <div key={col} style={{ fontSize: 12, fontWeight: 700, color: col === 'StayOps HQ' ? '#F5C451' : 'rgba(255,255,255,0.5)', textAlign: 'center' as const, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>{col}</div>
               ))}
             </div>
             {COMPARISON.map((row, i) => (
@@ -516,7 +516,7 @@ export default function HomePage() {
                 <span style={{ width: 30, height: 30, background: '#F5C451', borderRadius: 6, display: 'grid', placeItems: 'center' }}>
                   <Zap size={15} color="#0B1A2B" strokeWidth={2.5} />
                 </span>
-                Guest Ops HQ
+                StayOps HQ
               </div>
               <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.35)', lineHeight: 1.7, maxWidth: 280 }}>
                 Real-time guest issue management for luxury hotels and resorts. Log it, track it, close it — before checkout.
@@ -570,7 +570,7 @@ export default function HomePage() {
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 32, borderTop: '1px solid rgba(255,255,255,0.06)', flexWrap: 'wrap' as const, gap: 12 }}>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>© 2026 Guest Ops HQ Inc. All rights reserved.</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>© 2026 StayOps HQ Inc. All rights reserved.</p>
             <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.25)' }}>Built for luxury hospitality · Powered by real-time data</p>
           </div>
         </div>

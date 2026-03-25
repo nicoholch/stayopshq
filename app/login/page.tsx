@@ -55,7 +55,7 @@ function LoginForm() {
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
             <span style={{ width: 40, height: 40, background: '#F5C451', borderRadius: 10, display: 'grid', placeItems: 'center' }}><Zap size={20} color="#0B1A2B" strokeWidth={2.5} /></span>
-            Guest Ops HQ
+            StayOps HQ
           </Link>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, marginTop: 12 }}>
             {mode === 'login' ? 'Sign in to your hotel account' : 'Create your hotel account'}

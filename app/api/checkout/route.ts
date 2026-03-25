@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const hotel = (profile.hotels as unknown) as { stripe_customer_id: string | null; name: string } | null;
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://guestopshq.com';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stayopshq.com';
 
     // Create or reuse Stripe customer
     let customerId = hotel?.stripe_customer_id;

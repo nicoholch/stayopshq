@@ -196,7 +196,7 @@ export default function DashboardClient({
 
       {showBanner && (
         <div style={{ background: 'var(--success)', color: 'white', textAlign: 'center', padding: '12px', fontSize: '14px', fontWeight: 600 }}>
-          Welcome to Guest Ops HQ {hotel.plan}! Your 14-day trial has started.
+          Welcome to StayOps HQ {hotel.plan}! Your 14-day trial has started.
           <button onClick={() => setShowBanner(false)} style={{ marginLeft: 16, background: 'none', border: 'none', color: 'white', cursor: 'pointer', fontSize: 18 }}>×</button>
         </div>
       )}

@@ -135,7 +135,7 @@ export default function OnboardingPage() {
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white', marginBottom: 40 }}>
         <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}><Zap size={18} color="#0B1A2B" strokeWidth={2.5} /></span>
-        Guest Ops HQ
+        StayOps HQ
       </div>
 
       {/* Step progress */}
@@ -246,7 +246,7 @@ export default function OnboardingPage() {
         {step === 'goals' && (
           <div>
             <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: 800, marginBottom: 8 }}>What are your top priorities?</h2>
-            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: 32 }}>Select up to 3. Guest Ops HQ will tailor questions and insights around these goals.</p>
+            <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: 32 }}>Select up to 3. StayOps HQ will tailor questions and insights around these goals.</p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {GOALS.map(g => {
@@ -278,7 +278,7 @@ export default function OnboardingPage() {
         {/* ── Step 3: Departments ── */}
         {step === 'departments' && (
           <div>
-            <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: 800, marginBottom: 8 }}>Which departments will use Guest Ops HQ?</h2>
+            <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: 800, marginBottom: 8 }}>Which departments will use StayOps HQ?</h2>
             <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, marginBottom: 32 }}>Select all that apply. You can add or remove departments at any time.</p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
@@ -302,7 +302,7 @@ export default function OnboardingPage() {
                 disabled={saving || selectedDepts.length === 0}
                 style={{ flex: 1, padding: 15, background: '#F5C451', color: '#0B1A2B', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: saving ? 'not-allowed' : 'pointer', opacity: saving || selectedDepts.length === 0 ? 0.7 : 1 }}
               >
-                {saving ? 'Setting up your account…' : 'Launch Guest Ops HQ →'}
+                {saving ? 'Setting up your account…' : 'Launch StayOps HQ →'}
               </button>
             </div>
           </div>
@@ -316,7 +316,7 @@ export default function OnboardingPage() {
             </div>
             <h2 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 800, marginBottom: 12 }}>You're all set!</h2>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15, marginBottom: 8 }}>
-              <strong style={{ color: 'white' }}>{hotelName}</strong> is live on Guest Ops HQ.
+              <strong style={{ color: 'white' }}>{hotelName}</strong> is live on StayOps HQ.
             </p>
             <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, marginBottom: 40 }}>
               Your 14-day free trial has started. No card required.
