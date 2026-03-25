@@ -181,7 +181,7 @@ function emailWrapper(hotelName: string, body: string): string {
           ${body}
           <hr style="border:none;border-top:1px solid #E5E7EB;margin:36px 0 24px;">
           <p style="font-size:12px;color:#9CA3AF;text-align:center;line-height:1.6;margin:0;">
-            This email was sent by ${hotelName} via Guest Ops HQ.<br>
+            This email was sent by ${hotelName} via StayOps HQ.<br>
             You received this because you recently stayed with us.
           </p>
         </td></tr>
