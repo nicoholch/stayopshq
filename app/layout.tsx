@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     'Capture guest feedback in real time — during the stay, not after. Triple your feedback conversion rate and surface actionable insights with AI-powered analysis.',
 
   // Canonical URL — important for avoiding duplicate-content penalties
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://guestopshq.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://stayopshq.com'),
 
   // Open Graph — controls how links look when shared on Slack, LinkedIn, iMessage, etc.
   openGraph: {

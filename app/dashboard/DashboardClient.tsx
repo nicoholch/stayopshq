@@ -45,6 +45,28 @@ const STATUS_BORDER: Record<ComplaintStatus, string> = {
 
 const SAT_LABELS: Record<number, string> = { 1: 'Unsatisfied', 2: 'Dissatisfied', 3: 'Neutral', 4: 'Satisfied', 5: 'Very Satisfied' };
 
+function StaffCaptureLink({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const url = typeof window !== 'undefined' ? `${window.location.origin}/capture/${slug}` : `/capture/${slug}`;
+
+  function copy() {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
+  return (
+    <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 10, padding: '12px 18px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+      <span style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--gold-dark)', flexShrink: 0 }}>Staff Capture Link</span>
+      <span style={{ fontSize: 13, color: 'var(--text-muted)', fontFamily: 'monospace', flexGrow: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{url}</span>
+      <button onClick={copy} style={{ padding: '6px 14px', background: copied ? 'var(--success)' : 'var(--gold)', color: copied ? 'white' : 'var(--navy)', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 12, cursor: 'pointer', flexShrink: 0, fontFamily: 'inherit', transition: 'all 0.2s' }}>
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
+    </div>
+  );
+}
+
 export default function DashboardClient({
   hotel, profile, initialComplaints, initialGuests, deptCounts,
   openCount, criticalCount, resolvedTodayCount, justSubscribed, isDemo,
@@ -183,6 +205,19 @@ export default function DashboardClient({
   const isPro = hotel.plan === 'pro' || hotel.plan === 'enterprise';
   const maxDeptCount = deptCounts.length ? Math.max(...deptCounts.map(d => d.total_count)) : 1;
 
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  async function manageBilling() {
+    setPortalLoading(true);
+    try {
+      const res = await fetch('/api/portal', { method: 'POST' });
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } finally {
+      setPortalLoading(false);
+    }
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: '72px' }}>
 
@@ -203,6 +238,9 @@ export default function DashboardClient({
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '36px 24px' }}>
 
+        {/* Staff capture link */}
+        <StaffCaptureLink slug={hotel.slug} />
+
         {/* Top bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
           <div>
@@ -218,6 +256,15 @@ export default function DashboardClient({
               </span>
             </p>
           </div>
+          {hotel.stripe_customer_id && (
+            <button
+              onClick={manageBilling}
+              disabled={portalLoading}
+              style={{ padding: '9px 18px', border: '2px solid var(--border)', color: 'var(--text-muted)', borderRadius: 8, fontWeight: 600, fontSize: 13, background: 'none', cursor: portalLoading ? 'not-allowed' : 'pointer', opacity: portalLoading ? 0.7 : 1, fontFamily: 'inherit' }}
+            >
+              {portalLoading ? 'Loading…' : 'Manage Billing'}
+            </button>
+          )}
           <a href="/analytics" style={{ padding: '9px 18px', border: '2px solid var(--border)', color: 'var(--text-muted)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
             Analytics
           </a>

@@ -3,11 +3,22 @@
  * Server Component — fully rendered HTML sent to the browser and crawlers.
  */
 
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'StayOps HQ — Guest Complaint Management for Luxury Hotels',
+  description: 'Log, track, and resolve every guest issue before checkout. Real-time complaint management built for 5-star hotels and resorts. Staff log issues in 30 seconds.',
+  openGraph: {
+    title: 'StayOps HQ — Guest Complaint Management for Luxury Hotels',
+    description: 'Real-time complaint tracking for 5-star hotels. Staff log issues in 30 seconds. Management resolves them before the guest checks out.',
+  },
+};
 import {
   Zap, X, Check, MessageSquare, Clock, TrendingDown, CheckCircle2,
-  AlertTriangle, Activity, Building2, Bell, Sparkles, Star,
+  AlertTriangle, Activity, Building2, Bell, Sparkles,
 } from 'lucide-react';
+import PricingButton from '@/app/components/PricingButton';
 
 const STAT_CARDS = [
   { Icon: MessageSquare, value: '67%',      desc: 'Of guest issues are reported verbally and never logged',          positive: false },
@@ -25,29 +36,6 @@ const FEATURES = [
   { Icon: Sparkles,      title: 'AI Pattern Detection',    body: 'Pro plan: AI identifies recurring patterns, repeat issues by room or department, and surfaces prioritised recommendations.' },
 ];
 
-const TESTIMONIALS = [
-  {
-    quote: "We used to run the morning briefing from memory and WhatsApp screenshots. Now we run it from StayOps HQ. Every issue from the night before is logged, assigned, and either resolved or escalating. It changed how we start every single day.",
-    name: 'James Whitfield',
-    title: 'General Manager',
-    property: 'Private Island Resort, Indian Ocean',
-    stars: 5,
-  },
-  {
-    quote: "The 30-second logging is real. Our beach staff are not tech people — they log an issue between guest interactions without thinking about it. Before StayOps HQ we were losing at least three issues per shift to verbal handoffs that never reached management.",
-    name: 'Elena Marchetti',
-    title: 'Director of Operations',
-    property: 'Boutique Coastal Collection, Amalfi',
-    stars: 5,
-  },
-  {
-    quote: "What convinced me was the severity triage. A broken safe and a noisy AC are not the same problem, but our old system treated them identically. Now my team knows exactly what to drop everything for and what can wait until after service.",
-    name: 'David Osei',
-    title: 'Front Office Manager',
-    property: 'Luxury Safari Lodge, Kenya',
-    stars: 5,
-  },
-];
 
 const COMPARISON: { feature: string; pulsestay: boolean | 'partial'; paper: boolean | 'partial'; spreadsheet: boolean | 'partial'; whatsapp: boolean | 'partial' }[] = [
   { feature: 'Issues logged in under 30 seconds', pulsestay: true,  paper: false, spreadsheet: false, whatsapp: false },
@@ -95,9 +83,19 @@ function CheckCell({ value }: { value: boolean | 'partial' }) {
   return                          <span style={{ color: '#EF4444', fontWeight: 700, fontSize: 18 }}>✕</span>;
 }
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'StayOps HQ',
+  url: 'https://stayopshq.com',
+  description: 'Real-time guest complaint management for luxury hotels and 5-star resorts.',
+  contactPoint: { '@type': 'ContactPoint', email: 'hello@stayopshq.com', contactType: 'customer support' },
+};
+
 export default function HomePage() {
   return (
     <main style={{ fontFamily: 'var(--font)' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── Navbar ── */}
       <nav style={{
@@ -157,6 +155,9 @@ export default function HomePage() {
               <Link href="/dashboard" className="btn-ghost" style={{ padding: '16px 32px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
                 View Live Demo
               </Link>
+              <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ padding: '16px 0', color: 'rgba(255,255,255,0.55)', fontSize: 15, textDecoration: 'none', fontWeight: 500 }}>
+                Book a 15-Min Call →
+              </a>
             </div>
             <div style={{ marginTop: 52, paddingTop: 40, borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               {/* Conversion anchor */}
@@ -338,33 +339,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Testimonials ── */}
+      {/* ── Founding Partners ── */}
       <section style={{ padding: '96px 0', background: 'linear-gradient(180deg, #0B1A2B 0%, #0F2438 100%)' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ textAlign: 'center' as const, marginBottom: 56 }}>
-            <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#F5C451', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
-              Early Access
-            </span>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>What Hospitality Leaders Are Saying</h2>
-            <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>From GMs and operations directors who ran the pilot programme.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-            {TESTIMONIALS.map(t => (
-              <div key={t.name} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 16, padding: 32, display: 'flex', flexDirection: 'column' as const, gap: 24 }}>
-                <div style={{ display: 'flex', gap: 4 }}>
-                  {Array.from({ length: t.stars }).map((_, i) => (
-                    <Star key={i} size={16} color="#F5C451" fill="#F5C451" strokeWidth={0} />
-                  ))}
-                </div>
-                <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, fontStyle: 'italic', flexGrow: 1 }}>"{t.quote}"</p>
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20 }}>
-                  <div style={{ fontWeight: 700, color: 'white', fontSize: 14 }}>{t.name}</div>
-                  <div style={{ fontSize: 13, color: '#F5C451', marginTop: 2 }}>{t.title}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>{t.property}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px', textAlign: 'center' as const }}>
+          <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#F5C451', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 24 }}>
+            Founding Partners
+          </span>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 20 }}>
+            Be Among the First Properties on StayOps HQ
+          </h2>
+          <p style={{ color: '#B8C5D6', fontSize: '1.05rem', lineHeight: 1.8, marginBottom: 16 }}>
+            We are onboarding our first properties now. In exchange for honest feedback and a short testimonial after 30 days, founding partners receive <strong style={{ color: '#F5C451' }}>6 months free on the Pro plan</strong> — no credit card required.
+          </p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', marginBottom: 48 }}>
+            Limited to 10 properties. 3 spots remaining.
+          </p>
+          <a
+            href="https://calendly.com/hello-stayopshq/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: 'inline-block', padding: '16px 40px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}
+          >
+            Book a 15-Min Call to Claim Your Spot
+          </a>
         </div>
       </section>
 
@@ -448,9 +445,9 @@ export default function HomePage() {
                   ))}
                 </ul>
                 {plan.name === 'Enterprise' ? (
-                  <a href="mailto:hello@guestopshq.com" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>{plan.cta}</a>
+                  <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>Book a 15-Min Call</a>
                 ) : (
-                  <a href="/login" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>{plan.cta}</a>
+                  <PricingButton plan={plan.name.toLowerCase() as 'starter' | 'pro'} cta={plan.cta} ctaStyle={plan.ctaStyle} />
                 )}
               </div>
             ))}
@@ -546,7 +543,9 @@ export default function HomePage() {
                   { label: 'About',   href: '#' },
                   { label: 'Blog',    href: '#' },
                   { label: 'Careers', href: '#' },
-                  { label: 'Contact', href: 'mailto:hello@guestopshq.com' },
+                  { label: 'Book a Call', href: 'https://calendly.com/hello-stayopshq/30min' },
+                  { label: 'Privacy', href: '/privacy' },
+                  { label: 'Terms', href: '/terms' },
                 ].map(l => (
                   <a key={l.label} href={l.href} style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>{l.label}</a>
                 ))}

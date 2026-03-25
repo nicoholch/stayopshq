@@ -18,6 +18,21 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showForgot, setShowForgot] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSent, setResetSent] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault();
+    setResetLoading(true);
+    const supabase = createClient();
+    await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: `${window.location.origin}/auth/reset`,
+    });
+    setResetSent(true);
+    setResetLoading(false);
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -119,6 +134,34 @@ function LoginForm() {
               {loading ? 'Please wait…' : mode === 'login' ? 'Sign In' : 'Create Account'}
             </button>
           </form>
+
+          {mode === 'login' && !showForgot && (
+            <button onClick={() => setShowForgot(true)} style={{ display: 'block', width: '100%', marginTop: 16, background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>
+              Forgot your password?
+            </button>
+          )}
+
+          {showForgot && (
+            <form onSubmit={handleForgot} style={{ marginTop: 20, borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {resetSent ? (
+                <p style={{ fontSize: 13, color: '#10B981', textAlign: 'center' }}>
+                  Check your email for a reset link.
+                </p>
+              ) : (
+                <>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: 2 }}>Enter your email to reset your password</label>
+                  <input
+                    type="email" required value={resetEmail} onChange={e => setResetEmail(e.target.value)}
+                    placeholder="manager@yourhotel.com"
+                    style={{ width: '100%', padding: '11px 14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, color: 'white', fontSize: 14, fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }}
+                  />
+                  <button type="submit" disabled={resetLoading} style={{ padding: '11px', background: 'rgba(245,196,81,0.15)', border: '1px solid rgba(245,196,81,0.3)', borderRadius: 8, color: '#F5C451', fontWeight: 600, fontSize: 14, cursor: resetLoading ? 'not-allowed' : 'pointer', fontFamily: 'inherit' }}>
+                    {resetLoading ? 'Sending…' : 'Send Reset Link'}
+                  </button>
+                </>
+              )}
+            </form>
+          )}
 
           {/* Demo notice */}
           <div style={{ marginTop: 24, padding: '14px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 8, textAlign: 'center' }}>
