@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { Zap } from 'lucide-react';
 
 export default function ResetPage() {
-  const supabase = createClient();
   const router = useRouter();
   const [ready, setReady] = useState(false);
   const [password, setPassword] = useState('');
@@ -18,6 +17,8 @@ export default function ResetPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // createClient only called in browser, never during SSR/prerender
+    const supabase = createClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') setReady(true);
     });
@@ -30,6 +31,7 @@ export default function ResetPage() {
     if (password.length < 6) { setError('Password must be at least 6 characters'); return; }
     setLoading(true);
     setError('');
+    const supabase = createClient();
     const { error } = await supabase.auth.updateUser({ password });
     if (error) { setError(error.message); setLoading(false); return; }
     router.push('/dashboard');
