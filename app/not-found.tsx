@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Zap } from 'lucide-react';
+import { ConciergeBell } from 'lucide-react';
 
 export default function NotFound() {
   return (
@@ -7,7 +7,7 @@ export default function NotFound() {
       <div style={{ maxWidth: 480 }}>
         <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white', textDecoration: 'none', marginBottom: 48 }}>
           <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
-            <Zap size={18} color="#0B1A2B" strokeWidth={2.5} />
+            <ConciergeBell size={18} color="#0B1A2B" strokeWidth={2.5} />
           </span>
           StayOps HQ
         </Link>

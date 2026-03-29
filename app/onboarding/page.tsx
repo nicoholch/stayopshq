@@ -4,10 +4,9 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import {
-  Zap, Target, BedDouble, UtensilsCrossed, TrendingUp, Star, Heart,
-  ConciergeBell, Sparkles, Map, Dumbbell, Waves, Car, Leaf, Wrench, Check, PartyPopper,
+  Zap, Target, BedDouble, UtensilsCrossed, TrendingUp, Star, Heart, ConciergeBell,
+  Sparkles, Map, Dumbbell, Waves, Car, Leaf, Wrench, Check, PartyPopper,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -85,38 +84,21 @@ export default function OnboardingPage() {
     setSaving(true);
     setError('');
     try {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { router.push('/login'); return; }
-
       const resolvedPropertyType = propertyType === 'other' ? customPropertyType.trim() : propertyType;
 
-      // Create hotel
-      const { data: hotel, error: hotelErr } = await supabase
-        .from('hotels')
-        .insert({
+      const res = await fetch('/api/onboarding', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           name: hotelName,
           slug,
           property_type: resolvedPropertyType || null,
-          plan: 'starter',
           public_page_enabled: publicPage,
-        })
-        .select()
-        .single();
+        }),
+      });
 
-      if (hotelErr) throw new Error(hotelErr.message);
-
-      // Create manager profile
-      const { error: profileErr } = await supabase
-        .from('profiles')
-        .insert({
-          id: user.id,
-          hotel_id: hotel.id,
-          full_name: user.email?.split('@')[0] ?? 'Manager',
-          role: 'manager',
-        });
-
-      if (profileErr) throw new Error(profileErr.message);
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error ?? 'Something went wrong. Please try again.');
 
       setStep('done');
     } catch (err: unknown) {
@@ -134,7 +116,7 @@ export default function OnboardingPage() {
 
       {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white', marginBottom: 40 }}>
-        <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}><Zap size={18} color="#0B1A2B" strokeWidth={2.5} /></span>
+        <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}><ConciergeBell size={18} color="#0B1A2B" strokeWidth={2.5} /></span>
         StayOps HQ
       </div>
 

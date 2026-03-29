@@ -4,6 +4,12 @@ import { getResend } from '@/lib/resend';
 import type { Complaint } from '@/types';
 
 export async function POST(req: NextRequest) {
+  // Only allow calls from the cron job (or internal server-to-server with the secret)
+  const authHeader = req.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { guest_id } = await req.json();
   if (!guest_id) return NextResponse.json({ error: 'guest_id required' }, { status: 400 });
 
@@ -168,7 +174,7 @@ function emailWrapper(hotelName: string, body: string): string {
         <!-- Header -->
         <tr><td style="background:#0B1A2B;border-radius:12px 12px 0 0;padding:32px 40px;text-align:center;">
           <div style="display:inline-flex;align-items:center;gap:10px;">
-            <span style="display:inline-block;width:34px;height:34px;background:#F5C451;border-radius:7px;font-size:16px;line-height:34px;text-align:center;">⚡</span>
+            <span style="display:inline-block;width:34px;height:34px;background:#F5C451;border-radius:7px;font-size:16px;line-height:34px;text-align:center;">🛎</span>
             <span style="font-size:20px;font-weight:800;color:white;">${hotelName}</span>
           </div>
         </td></tr>

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Zap } from 'lucide-react';
+import { ConciergeBell } from 'lucide-react';
 
 export default function ResetPage() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function ResetPage() {
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.4rem', color: 'white', textDecoration: 'none' }}>
             <span style={{ width: 40, height: 40, background: '#F5C451', borderRadius: 10, display: 'grid', placeItems: 'center' }}>
-              <Zap size={20} color="#0B1A2B" strokeWidth={2.5} />
+              <ConciergeBell size={20} color="#0B1A2B" strokeWidth={2.5} />
             </span>
             StayOps HQ
           </Link>

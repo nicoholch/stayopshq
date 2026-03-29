@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
-import { Zap } from 'lucide-react';
+import { ConciergeBell } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -69,7 +69,7 @@ function LoginForm() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.4rem', color: 'white' }}>
-            <span style={{ width: 40, height: 40, background: '#F5C451', borderRadius: 10, display: 'grid', placeItems: 'center' }}><Zap size={20} color="#0B1A2B" strokeWidth={2.5} /></span>
+            <span style={{ width: 40, height: 40, background: '#F5C451', borderRadius: 10, display: 'grid', placeItems: 'center' }}><ConciergeBell size={20} color="#0B1A2B" strokeWidth={2.5} /></span>
             StayOps HQ
           </Link>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, marginTop: 12 }}>
@@ -163,14 +163,6 @@ function LoginForm() {
             </form>
           )}
 
-          {/* Demo notice */}
-          <div style={{ marginTop: 24, padding: '14px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 8, textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6 }}>
-              <strong style={{ color: '#F5C451' }}>Demo mode:</strong> Auth requires Supabase to be configured.<br />
-              <Link href="/dashboard" style={{ color: '#F5C451', fontWeight: 600 }}>View dashboard demo →</Link> or{' '}
-              <Link href="/capture" style={{ color: '#F5C451', fontWeight: 600 }}>try the capture app →</Link>
-            </p>
-          </div>
         </div>
 
         <p style={{ textAlign: 'center', fontSize: 13, color: 'rgba(255,255,255,0.3)', marginTop: 24 }}>

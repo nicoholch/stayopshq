@@ -3,10 +3,15 @@
  *
  * Accepts complaint submissions from unauthenticated staff via /capture/[slug].
  * Uses the admin client to bypass RLS — no auth required.
+ * hotel_id is validated against the DB to prevent arbitrary inserts.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+
+const VALID_SEVERITIES = ['low', 'medium', 'high', 'critical'];
+const MAX_DESCRIPTION_LENGTH = 2000;
+const MAX_FIELD_LENGTH = 100;
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +30,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    if (!VALID_SEVERITIES.includes(severity)) {
+      return NextResponse.json({ error: 'Invalid severity' }, { status: 400 });
+    }
+
+    if (description.length > MAX_DESCRIPTION_LENGTH) {
+      return NextResponse.json({ error: `Description must be ${MAX_DESCRIPTION_LENGTH} characters or less` }, { status: 400 });
+    }
+
+    if (department.length > MAX_FIELD_LENGTH || category.length > MAX_FIELD_LENGTH) {
+      return NextResponse.json({ error: 'Field too long' }, { status: 400 });
+    }
+
     const supabase = createAdminClient();
+
+    // Verify hotel_id exists — prevents submitting complaints to arbitrary UUIDs
+    const { data: hotel, error: hotelErr } = await supabase
+      .from('hotels')
+      .select('id')
+      .eq('id', hotel_id)
+      .single();
+
+    if (hotelErr || !hotel) {
+      return NextResponse.json({ error: 'Invalid hotel' }, { status: 400 });
+    }
 
     const { data, error } = await supabase.from('complaints').insert({
       hotel_id,

@@ -41,7 +41,10 @@ export async function GET(req: NextRequest) {
     try {
       const res = await fetch(`${appUrl}/api/send-followup`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.CRON_SECRET}`,
+        },
         body: JSON.stringify({ guest_id: guest.id }),
       });
       const body = await res.json();

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ConciergeBell } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import type { Hotel } from '@/types';
 
@@ -194,7 +195,7 @@ export default function PublicPageClient({ hotel, deptScores, initialReviews, to
         <div className="container">
           <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: 14, marginBottom: 16 }}>This sentiment page is powered by</p>
           <a href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, fontWeight: 800, fontSize: '1.3rem', color: 'white' }}>
-            <span style={{ width: 32, height: 32, background: 'var(--gold)', borderRadius: 7, display: 'grid', placeItems: 'center', fontSize: 16 }}>⚡</span>
+            <span style={{ width: 32, height: 32, background: 'var(--gold)', borderRadius: 7, display: 'grid', placeItems: 'center' }}><ConciergeBell size={15} color="#0B1A2B" strokeWidth={2.5} /></span>
             StayOps HQ
           </a>
           <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 13, marginTop: 12 }}>Real-time in-stay feedback capture for luxury hospitality</p>

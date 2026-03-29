@@ -15,10 +15,11 @@ export const metadata: Metadata = {
   },
 };
 import {
-  Zap, X, Check, MessageSquare, Clock, TrendingDown, CheckCircle2,
+  Zap, X, Check, MessageSquare, Clock, TrendingDown, CheckCircle2, ConciergeBell,
   AlertTriangle, Activity, Building2, Bell, Sparkles,
 } from 'lucide-react';
 import PricingButton from '@/app/components/PricingButton';
+import NavMobile from '@/app/components/NavMobile';
 
 const STAT_CARDS = [
   { Icon: MessageSquare, value: '67%',      desc: 'Of guest issues are reported verbally and never logged',          positive: false },
@@ -106,11 +107,11 @@ export default function HomePage() {
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.45rem', color: 'white', letterSpacing: '-0.02em' }}>
             <span style={{ width: 36, height: 36, background: '#F5C451', borderRadius: 8, display: 'grid', placeItems: 'center' }}>
-              <Zap size={18} color="#0B1A2B" strokeWidth={2.5} />
+              <ConciergeBell size={18} color="#0B1A2B" strokeWidth={2.5} />
             </span>
             StayOps HQ
           </div>
-          <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+          <div className="nav-links-desktop" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
             <a href="#how-it-works" className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>How It Works</a>
             <a href="#features"     className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Features</a>
             <a href="#pricing"      className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Pricing</a>
@@ -120,6 +121,9 @@ export default function HomePage() {
             <a href="/login" className="btn-gold" style={{ padding: '9px 18px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
               Get Started
             </a>
+          </div>
+          <div className="nav-mobile-toggle" style={{ display: 'none' }}>
+            <NavMobile />
           </div>
         </div>
       </nav>
@@ -134,7 +138,7 @@ export default function HomePage() {
         <div style={{ position: 'absolute', inset: 0, opacity: 0.06, backgroundImage: 'linear-gradient(rgba(245,196,81,1) 1px, transparent 1px), linear-gradient(90deg, rgba(245,196,81,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 70% 50%, rgba(245,196,81,0.07) 0%, transparent 60%)' }} />
 
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 1, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+        <div className="rg-hero" style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px', position: 'relative', zIndex: 1, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
 
           {/* Left: copy */}
           <div>
@@ -186,14 +190,14 @@ export default function HomePage() {
           </div>
 
           {/* Right: product mockup */}
-          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' as const }}>
+          <div className="rg-hero-mockup" style={{ display: 'flex', justifyContent: 'center', position: 'relative' as const }}>
             {/* Glow */}
             <div style={{ position: 'absolute', inset: '-40px', background: 'radial-gradient(ellipse at 50% 50%, rgba(245,196,81,0.1) 0%, transparent 65%)', pointerEvents: 'none' as const, zIndex: 0 }} />
             <div style={{ width: '100%', maxWidth: 420, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 16, overflow: 'hidden', boxShadow: '0 32px 80px rgba(0,0,0,0.5)', position: 'relative' as const, zIndex: 1 }}>
               {/* Mockup header */}
               <div style={{ padding: '14px 18px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 24, height: 24, background: '#F5C451', borderRadius: 5, display: 'grid', placeItems: 'center' }}><Zap size={12} color="#0B1A2B" strokeWidth={2.5} /></span>
+                  <span style={{ width: 24, height: 24, background: '#F5C451', borderRadius: 5, display: 'grid', placeItems: 'center' }}><ConciergeBell size={12} color="#0B1A2B" strokeWidth={2.5} /></span>
                   <span style={{ fontSize: 13, fontWeight: 700, color: 'white' }}>Live Dashboard</span>
                 </div>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, color: '#10B981' }}>
@@ -249,7 +253,7 @@ export default function HomePage() {
       {/* ── Problem ── */}
       <section style={{ padding: '96px 0', background: '#F8F6F2' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          <div className="rg-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
             <div>
               <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#C49B28', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 20 }}>
                 The Problem
@@ -298,7 +302,7 @@ export default function HomePage() {
           </span>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>From Issue to Resolution in Minutes</h2>
           <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 560, margin: '0 auto 64px' }}>A simple four-step loop that ensures no guest issue slips through the cracks.</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+          <div className="rg-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
               { n: '1', title: 'Guest Reports an Issue',      body: 'A guest mentions a problem to any staff member — at the pool, in the restaurant, or at the front desk.' },
               { n: '2', title: 'Staff Logs It in 30s',        body: 'The employee opens StayOps HQ, selects department and category, describes the issue, sets severity, and submits.' },
@@ -325,7 +329,7 @@ export default function HomePage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Everything You Need to Close Every Issue</h2>
             <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 560, margin: '0 auto' }}>Built for the operational pace of a luxury hospitality environment.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          <div className="rg-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {FEATURES.map(f => (
               <div key={f.title} style={{ background: 'white', borderRadius: 12, padding: '32px 28px', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
                 <div style={{ width: 52, height: 52, borderRadius: 12, background: 'rgba(245,196,81,0.1)', display: 'grid', placeItems: 'center', marginBottom: 20 }}>
@@ -375,7 +379,8 @@ export default function HomePage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', marginBottom: 12 }}>Built for This. Not Bolted On.</h2>
             <p style={{ color: '#6B7280', fontSize: '1.05rem', maxWidth: 520, margin: '0 auto' }}>Most hotels track issues with paper, spreadsheets, or WhatsApp. Here is how that compares.</p>
           </div>
-          <div style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 40px rgba(0,0,0,0.08)' }}>
+          <div className="comparison-scroll">
+          <div className="comparison-table" style={{ background: 'white', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 40px rgba(0,0,0,0.08)' }}>
             {/* Table header */}
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr', background: '#0B1A2B', padding: '16px 24px' }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: '#B8C5D6', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>Feature</div>
@@ -396,6 +401,7 @@ export default function HomePage() {
               <span style={{ fontSize: 12, color: '#9CA3AF' }}>~ = partially supported with significant manual effort</span>
             </div>
           </div>
+          </div>
         </div>
       </section>
 
@@ -409,7 +415,7 @@ export default function HomePage() {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>Start Resolving Issues in Minutes</h2>
             <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. 14-day free trial on all plans.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
+          <div className="rg-pricing" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
             {[
               {
                 name: 'Starter', price: '$149', period: 'per month / per property', featured: false,
@@ -427,7 +433,7 @@ export default function HomePage() {
                 cta: 'Talk to Sales', ctaStyle: { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' },
               },
             ].map(plan => (
-              <div key={plan.name} style={{ background: plan.featured ? '#F5C451' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#F5C451' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 36, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
+              <div key={plan.name} className={plan.featured ? 'rg-pricing-featured' : ''} style={{ background: plan.featured ? '#F5C451' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#F5C451' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 36, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
                 {plan.featured && (
                   <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#0B1A2B', color: '#F5C451', fontSize: 11, fontWeight: 700, padding: '4px 14px', borderRadius: 999, border: '1px solid #F5C451', whiteSpace: 'nowrap' as const }}>
                     Most Popular
@@ -505,13 +511,13 @@ export default function HomePage() {
       {/* ── Footer ── */}
       <footer style={{ background: '#070E16', padding: '64px 0 32px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
+          <div className="rg-footer" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
 
             {/* Brand */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '1.2rem', color: 'white', letterSpacing: '-0.02em', marginBottom: 16 }}>
                 <span style={{ width: 30, height: 30, background: '#F5C451', borderRadius: 6, display: 'grid', placeItems: 'center' }}>
-                  <Zap size={15} color="#0B1A2B" strokeWidth={2.5} />
+                  <ConciergeBell size={15} color="#0B1A2B" strokeWidth={2.5} />
                 </span>
                 StayOps HQ
               </div>
@@ -540,9 +546,8 @@ export default function HomePage() {
               <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>Company</div>
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
                 {[
-                  { label: 'About',   href: '#' },
-                  { label: 'Blog',    href: '#' },
-                  { label: 'Careers', href: '#' },
+                  { label: 'About',   href: '/about' },
+                  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/112352841/' },
                   { label: 'Book a Call', href: 'https://calendly.com/hello-stayopshq/30min' },
                   { label: 'Privacy', href: '/privacy' },
                   { label: 'Terms', href: '/terms' },
@@ -557,10 +562,8 @@ export default function HomePage() {
               <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.08em', color: 'rgba(255,255,255,0.3)', marginBottom: 16 }}>Legal</div>
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 10 }}>
                 {[
-                  { label: 'Privacy Policy',    href: '#' },
-                  { label: 'Terms of Service',  href: '#' },
-                  { label: 'Security',          href: '#' },
-                  { label: 'GDPR',              href: '#' },
+                  { label: 'Privacy Policy',   href: '/privacy' },
+                  { label: 'Terms of Service', href: '/terms' },
                 ].map(l => (
                   <a key={l.label} href={l.href} style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)', textDecoration: 'none' }}>{l.label}</a>
                 ))}

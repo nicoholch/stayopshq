@@ -10,7 +10,6 @@ const SUPABASE_CONFIGURED =
   !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY.startsWith('your-');
 
 export async function proxy(request: NextRequest) {
-  // ── Demo / unconfigured mode: pass all requests straight through ───
   if (!SUPABASE_CONFIGURED) {
     return NextResponse.next({ request });
   }
