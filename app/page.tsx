@@ -157,7 +157,7 @@ export default function HomePage() {
             <a href="#how-it-works" className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>How It Works</a>
             <a href="#features"     className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Features</a>
             <a href="#pricing"      className="nav-link" style={{ color: '#B8C5D6', fontSize: 14, fontWeight: 500 }}>Pricing</a>
-            <Link href="/dashboard" style={{ padding: '9px 18px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
+            <Link href="/dashboard" className="btn-ghost" style={{ padding: '9px 18px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
               Dashboard Demo
             </Link>
             <a href="/login" className="btn-gold" style={{ padding: '9px 18px', background: '#F5C451', color: '#0B1A2B', borderRadius: 8, fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
@@ -201,7 +201,7 @@ export default function HomePage() {
               <Link href="/dashboard" className="btn-ghost" style={{ padding: '16px 32px', border: '2px solid rgba(255,255,255,0.25)', color: 'white', borderRadius: 8, fontWeight: 700, fontSize: 16, textDecoration: 'none' }}>
                 View Live Demo
               </Link>
-              <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ padding: '16px 0', color: 'rgba(255,255,255,0.55)', fontSize: 15, textDecoration: 'none', fontWeight: 500 }}>
+              <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" className="btn-text-link" style={{ padding: '16px 0', color: 'rgba(255,255,255,0.55)', fontSize: 15, textDecoration: 'none', fontWeight: 500 }}>
                 Book a 15-Min Call →
               </a>
             </div>
@@ -498,9 +498,9 @@ export default function HomePage() {
                   ))}
                 </ul>
                 {plan.name === 'Enterprise' ? (
-                  <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Book a 15-Min Call</a>
+                  <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" className="btn-outline-dark" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Book a 15-Min Call</a>
                 ) : plan.name === 'Free' ? (
-                  <a href="/login" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Start for Free</a>
+                  <a href="/login" className="btn-outline-dark" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Start for Free</a>
                 ) : (
                   <PricingButton plan={plan.name.toLowerCase() as 'starter' | 'pro'} cta={plan.cta} ctaStyle={plan.featured ? { background: '#0B1A2B', color: 'white', border: 'none' } : { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }} />
                 )}
@@ -523,11 +523,11 @@ export default function HomePage() {
           <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 12 }}>
             {FAQS.map((faq, i) => (
               <details key={i} style={{ background: 'white', borderRadius: 12, boxShadow: '0 2px 12px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-                <summary style={{ padding: '20px 24px', fontWeight: 700, fontSize: 15, cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', userSelect: 'none' as const }}>
+                <summary style={{ padding: '20px 24px', fontWeight: 700, fontSize: 15, cursor: 'pointer', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, userSelect: 'none' as const }}>
                   {faq.q}
-                  <span style={{ fontSize: 20, color: '#F5C451', flexShrink: 0, marginLeft: 16 }}>+</span>
+                  <span className="faq-marker">+</span>
                 </summary>
-                <div style={{ padding: '0 24px 20px', color: '#6B7280', fontSize: 15, lineHeight: 1.75 }}>
+                <div className="faq-body" style={{ padding: '0 24px 20px', color: '#6B7280', fontSize: 15, lineHeight: 1.75 }}>
                   {faq.a}
                 </div>
               </details>

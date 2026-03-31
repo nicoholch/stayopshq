@@ -48,23 +48,108 @@ a { text-decoration: none; color: inherit; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 
-/* Gold CTA button — hover lift */
+/* Gold CTA button */
 .btn-gold {
-  box-shadow: 0 8px 24px rgba(245,196,81,0.25);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 4px 18px rgba(245,196,81,0.3);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  will-change: transform;
 }
 .btn-gold:hover {
-  transform: scale(1.03);
-  box-shadow: 0 12px 32px rgba(245,196,81,0.38);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(245,196,81,0.45);
+  filter: brightness(1.06);
+}
+.btn-gold:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(245,196,81,0.3);
 }
 
 /* Ghost / outline button */
 .btn-ghost {
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  will-change: transform;
 }
 .btn-ghost:hover {
-  background: rgba(255,255,255,0.08) !important;
-  border-color: rgba(255,255,255,0.5) !important;
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.1) !important;
+  border-color: rgba(255,255,255,0.6) !important;
+  box-shadow: 0 8px 24px rgba(255,255,255,0.08);
+}
+.btn-ghost:active {
+  transform: translateY(-1px);
+}
+
+/* Inline text link with animated arrow */
+.btn-text-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.18s ease, gap 0.18s ease;
+}
+.btn-text-link:hover {
+  color: rgba(255,255,255,0.85) !important;
+  gap: 8px;
+}
+
+/* Pricing outline buttons (dark bg) */
+.btn-outline-dark {
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  will-change: transform;
+}
+.btn-outline-dark:hover {
+  transform: translateY(-2px);
+  background: rgba(245,196,81,0.08) !important;
+  border-color: #F5C451 !important;
+  color: #F5C451 !important;
+  box-shadow: 0 6px 20px rgba(245,196,81,0.15);
+}
+.btn-outline-dark:active {
+  transform: translateY(0);
+}
+
+/* FAQ accordion */
+details {
+  transition: box-shadow 0.2s ease;
+}
+details:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09) !important;
+}
+details summary {
+  transition: background 0.18s ease;
+  outline: none;
+}
+details summary:hover {
+  background: rgba(245,196,81,0.04);
+}
+details summary::-webkit-details-marker { display: none; }
+.faq-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid #E5E7EB;
+  color: #F5C451;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+}
+details[open] .faq-marker {
+  transform: rotate(45deg);
+  background: rgba(245,196,81,0.1);
+  border-color: rgba(245,196,81,0.4);
+}
+.faq-body {
+  overflow: hidden;
+  animation: faqExpand 0.25s ease forwards;
+}
+@keyframes faqExpand {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* Navbar links */
