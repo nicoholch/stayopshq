@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   // Only managers can invite
   const { data: profile } = await supabase
     .from('profiles')
-    .select('hotel_id, role, full_name, hotels(name)')
+    .select('hotel_id, role, full_name, hotels(name, plan)')
     .eq('id', user.id)
     .single();
 
@@ -25,8 +25,27 @@ export async function POST(req: NextRequest) {
   }
 
   const admin   = createAdminClient();
+
+  // Enforce manager limits per plan
+  const hotelPlan = (profile.hotels as unknown as { name: string; plan: string } | null)?.plan ?? 'free';
+  const MANAGER_LIMITS: Record<string, number> = { free: 1, starter: 3 };
+  const limit = MANAGER_LIMITS[hotelPlan];
+  if (limit !== undefined) {
+    const { count: managerCount } = await admin
+      .from('profiles')
+      .select('id', { count: 'exact', head: true })
+      .eq('hotel_id', profile.hotel_id)
+      .eq('role', 'manager');
+    if ((managerCount ?? 0) >= limit) {
+      const nextPlan = hotelPlan === 'free' ? 'Starter ($49/mo)' : 'Pro ($149/mo)';
+      return NextResponse.json(
+        { error: `Manager limit reached for your plan. Upgrade to ${nextPlan} to add more managers.`, upgrade: true },
+        { status: 403 },
+      );
+    }
+  }
   const appUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://stayopshq.com';
-  const hotelName = (profile.hotels as unknown as { name: string } | null)?.name ?? 'your hotel';
+  const hotelName = (profile.hotels as unknown as { name: string; plan: string } | null)?.name ?? 'your hotel';
   const inviterName = profile.full_name ?? 'Your manager';
 
   // Generate the invite link without sending Supabase's default email

@@ -47,12 +47,30 @@ export async function POST(req: NextRequest) {
     // Verify hotel_id exists — prevents submitting complaints to arbitrary UUIDs
     const { data: hotel, error: hotelErr } = await supabase
       .from('hotels')
-      .select('id')
+      .select('id, plan')
       .eq('id', hotel_id)
       .single();
 
     if (hotelErr || !hotel) {
       return NextResponse.json({ error: 'Invalid hotel' }, { status: 400 });
+    }
+
+    // Free plan: enforce 30 issues/month cap
+    if ((hotel as unknown as { plan: string }).plan === 'free') {
+      const monthStart = new Date();
+      monthStart.setDate(1);
+      monthStart.setHours(0, 0, 0, 0);
+      const { count } = await supabase
+        .from('complaints')
+        .select('id', { count: 'exact', head: true })
+        .eq('hotel_id', hotel_id)
+        .gte('created_at', monthStart.toISOString());
+      if ((count ?? 0) >= 30) {
+        return NextResponse.json(
+          { error: 'Monthly limit of 30 issues reached. Upgrade to Starter for unlimited logging.', upgrade: true },
+          { status: 403 },
+        );
+      }
     }
 
     const { data, error } = await supabase.from('complaints').insert({

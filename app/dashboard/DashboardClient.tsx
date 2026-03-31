@@ -21,6 +21,7 @@ interface Props {
   openCount: number;
   criticalCount: number;
   resolvedTodayCount: number;
+  monthlyCount: number;
   justSubscribed: boolean;
   isDemo: boolean;
 }
@@ -80,7 +81,7 @@ function StaffCaptureLink({ slug }: { slug: string }) {
 
 export default function DashboardClient({
   hotel, profile, initialComplaints, initialGuests, deptCounts,
-  openCount, criticalCount, resolvedTodayCount, justSubscribed, isDemo,
+  openCount, criticalCount, resolvedTodayCount, monthlyCount, justSubscribed, isDemo,
 }: Props) {
   const [complaints, setComplaints] = useState<Complaint[]>(initialComplaints);
   const [open, setOpen]             = useState(openCount);
@@ -329,6 +330,11 @@ export default function DashboardClient({
 
         {/* Staff capture link */}
         <StaffCaptureLink slug={hotel.slug} />
+
+        {/* Free plan monthly usage bar */}
+        {hotel.plan === 'free' && (
+          <FreePlanUsageBar monthlyCount={monthlyCount} />
+        )}
 
         {/* Top bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
@@ -698,9 +704,9 @@ export default function DashboardClient({
           )}
         </div>
 
-        {/* Pro gate: AI Insights */}
+        {/* Upgrade nudge */}
         {!isPro && (
-          <SmartUpgradeNudge complaints={complaints} />
+          <SmartUpgradeNudge complaints={complaints} plan={hotel.plan} />
         )}
       </div>
 
@@ -725,8 +731,57 @@ function formatStayDates(checkIn: string, checkOut: string): string {
   return `${fmt(checkIn)} – ${fmt(checkOut)}`;
 }
 
+// ── Free plan usage bar ───────────────────────────────────────────────────────
+function FreePlanUsageBar({ monthlyCount }: { monthlyCount: number }) {
+  const [loading, setLoading] = useState(false);
+  const pct     = Math.min((monthlyCount / 30) * 100, 100);
+  const atLimit = monthlyCount >= 30;
+  const nearLimit = monthlyCount >= 25;
+  const barColor = atLimit ? '#DC2626' : nearLimit ? '#D97706' : '#10B981';
+
+  async function handleUpgrade() {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: 'starter' }),
+      });
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div style={{ background: atLimit ? 'rgba(220,38,38,0.06)' : nearLimit ? 'rgba(217,119,6,0.06)' : 'white', border: `1px solid ${atLimit ? 'rgba(220,38,38,0.2)' : nearLimit ? 'rgba(217,119,6,0.2)' : 'var(--border)'}`, borderRadius: 10, padding: '14px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+      <div style={{ flex: 1, minWidth: 200 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: atLimit ? '#DC2626' : nearLimit ? '#D97706' : 'var(--text)' }}>
+            {atLimit ? 'Monthly limit reached' : `${monthlyCount} / 30 issues logged this month`}
+          </span>
+          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Free plan</span>
+        </div>
+        <div style={{ height: 6, background: 'var(--border)', borderRadius: 3, overflow: 'hidden' }}>
+          <div style={{ height: '100%', width: `${pct}%`, background: barColor, borderRadius: 3, transition: 'width 0.4s ease' }} />
+        </div>
+        {nearLimit && !atLimit && (
+          <p style={{ fontSize: 12, color: '#D97706', marginTop: 5 }}>Approaching your limit — upgrade to Starter for unlimited logging.</p>
+        )}
+        {atLimit && (
+          <p style={{ fontSize: 12, color: '#DC2626', marginTop: 5 }}>New issues can't be logged until you upgrade or the month resets.</p>
+        )}
+      </div>
+      <button onClick={handleUpgrade} disabled={loading} style={{ padding: '8px 18px', background: 'var(--navy)', color: 'white', border: 'none', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer', flexShrink: 0, opacity: loading ? 0.7 : 1 }}>
+        {loading ? 'Redirecting…' : 'Upgrade to Starter — $49/mo'}
+      </button>
+    </div>
+  );
+}
+
 // ── Smart upgrade nudge ───────────────────────────────────────────────────────
-function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
+function SmartUpgradeNudge({ complaints, plan }: { complaints: Complaint[]; plan: string }) {
   const [loading, setLoading] = useState(false);
 
   const total    = complaints.length;
@@ -739,15 +794,25 @@ function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
   for (const c of complaints) deptMap.set(c.department, (deptMap.get(c.department) ?? 0) + 1);
   const topDept = [...deptMap.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
-  const isReady = total >= 10;
+  const isFree    = plan === 'free';
+  const isReady   = total >= 10;
+  const targetPlan = isFree ? 'starter' : 'pro';
+  const price      = isFree ? '$49' : '$149';
 
-  const headline = isReady
-    ? `You've logged ${total} guest opportunities — your data is ready.`
-    : `Log ${10 - total} more ${10 - total === 1 ? 'issue' : 'issues'} to unlock AI Insights.`;
+  const headline = isFree
+    ? `Upgrade to Starter — unlimited logging, 3 managers.`
+    : isReady
+      ? `You've logged ${total} guest opportunities — your data is ready.`
+      : `Log ${10 - total} more ${10 - total === 1 ? 'issue' : 'issues'} to unlock AI Insights.`;
 
-  const subtext = isReady
-    ? `${resolved} resolved${avgSat ? `, avg satisfaction ${avgSat}/5` : ''}${topDept ? `, most active: ${topDept}` : ''}. Upgrade to Pro for AI-generated pattern detection, repeat issue identification, and prioritized recommendations built from your real data.`
-    : `AI Insights analyses your complaint patterns, flags recurring problems, and gives your team prioritized action recommendations. The more you log, the more powerful it gets.`;
+  const subtext = isFree
+    ? `You're on the free plan (30 issues/month, 1 manager). Upgrade to Starter for unlimited logging, full analytics, and up to 3 managers — no limits on what your team can track.`
+    : isReady
+      ? `${resolved} resolved${avgSat ? `, avg satisfaction ${avgSat}/5` : ''}${topDept ? `, most active: ${topDept}` : ''}. Upgrade to Pro for AI-generated pattern detection, repeat issue identification, and prioritized recommendations built from your real data.`
+      : `AI Insights analyses your complaint patterns, flags recurring problems, and gives your team prioritized action recommendations. The more you log, the more powerful it gets.`;
+
+  const label = isFree ? 'AI Insights' : 'AI Insights';
+  const badge = isFree ? 'STARTER' : 'PRO';
 
   async function handleUpgrade() {
     setLoading(true);
@@ -755,7 +820,7 @@ function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: 'pro' }),
+        body: JSON.stringify({ plan: targetPlan }),
       });
       const { url, error } = await res.json();
       if (error) throw new Error(error);
@@ -772,17 +837,17 @@ function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
         <div style={{ flex: 1, minWidth: 280 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <Sparkles size={20} color="#F5C451" strokeWidth={1.75} />
-            <span style={{ fontSize: '1rem', fontWeight: 700 }}>AI Insights</span>
-            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: 'rgba(245,196,81,0.15)', color: '#F5C451' }}>PRO</span>
+            <span style={{ fontSize: '1rem', fontWeight: 700 }}>{isFree ? 'Starter Plan' : 'AI Insights'}</span>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: 'rgba(245,196,81,0.15)', color: '#F5C451' }}>{badge}</span>
           </div>
           <p style={{ fontSize: '1.05rem', fontWeight: 700, color: 'white', margin: '0 0 8px', lineHeight: 1.4 }}>{headline}</p>
           <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{subtext}</p>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, flexShrink: 0 }}>
-          {isReady ? (
+          {(isFree || isReady) ? (
             <button onClick={handleUpgrade} disabled={loading} style={{ padding: '12px 28px', background: '#F5C451', color: '#0B1A2B', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, whiteSpace: 'nowrap' }}>
-              {loading ? 'Redirecting…' : 'Unlock AI Insights — $349/mo'}
+              {loading ? 'Redirecting…' : `Upgrade to ${isFree ? 'Starter' : 'Pro'} — ${price}/mo`}
             </button>
           ) : (
             <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '12px 20px', textAlign: 'center' }}>
@@ -790,7 +855,7 @@ function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
               <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>entries logged</div>
             </div>
           )}
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', margin: 0 }}>Cancel anytime</p>
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', margin: 0 }}>Cancel anytime · 14-day free trial</p>
         </div>
       </div>
     </div>

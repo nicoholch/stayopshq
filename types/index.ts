@@ -1,4 +1,4 @@
-export type Plan = 'starter' | 'pro' | 'enterprise';
+export type Plan = 'free' | 'starter' | 'pro' | 'enterprise';
 
 export interface Hotel {
   id: string;

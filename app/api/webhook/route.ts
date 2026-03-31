@@ -65,7 +65,11 @@ export async function POST(req: NextRequest) {
         const priceId = sub.items.data[0]?.price.id;
 
         if (hotelId && priceId) {
-          const plan = priceId === process.env.STRIPE_PRICE_PRO ? 'pro' : 'starter';
+          const plan = priceId === process.env.STRIPE_PRICE_PRO
+            ? 'pro'
+            : priceId === process.env.STRIPE_PRICE_STARTER
+              ? 'starter'
+              : 'free';
           await supabase.from('hotels').update({ plan }).eq('id', hotelId);
         }
         break;
@@ -77,7 +81,7 @@ export async function POST(req: NextRequest) {
         const hotelId = sub.metadata?.hotel_id;
         if (hotelId) {
           await supabase.from('hotels').update({
-            plan: 'starter',
+            plan: 'free',
             stripe_subscription_id: null,
           }).eq('id', hotelId);
         }

@@ -10,13 +10,13 @@ export const PLANS = {
   starter: {
     name: 'Starter',
     priceId: process.env.STRIPE_PRICE_STARTER!,
-    price: 149,
-    features: ['3 departments', 'Real-time capture', 'Basic dashboard', 'Weekly reports'],
+    price: 49,
+    features: ['Unlimited issue logging', 'Up to 3 managers', 'Full analytics & KPIs', 'Continuous improvement tracking', 'Guest follow-up emails'],
   },
   pro: {
     name: 'Pro',
     priceId: process.env.STRIPE_PRICE_PRO!,
-    price: 349,
-    features: ['Unlimited departments', 'AI analysis', 'Instant alerts', 'Public sentiment page'],
+    price: 149,
+    features: ['Everything in Starter', 'AI pattern detection', 'Unlimited managers', 'Priority support'],
   },
 } as const;

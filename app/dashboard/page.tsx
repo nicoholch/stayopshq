@@ -71,6 +71,7 @@ export default async function DashboardPage({
         openCount={openCount}
         criticalCount={criticalCount}
         resolvedTodayCount={resolvedCount}
+        monthlyCount={6}
         justSubscribed={false}
         isDemo={true}
       />
@@ -93,6 +94,10 @@ export default async function DashboardPage({
   const hotel    = profile.hotels as Hotel;
   const todayStr = new Date().toISOString().split('T')[0];
 
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+
   const [
     { data: recentComplaints },
     { data: deptCounts },
@@ -100,6 +105,7 @@ export default async function DashboardPage({
     { count: criticalCount },
     { count: resolvedTodayCount },
     { data: activeGuests },
+    { count: monthlyCount },
   ] = await Promise.all([
     supabase.from('complaints').select('*').eq('hotel_id', hotel.id)
       .gte('created_at', `${todayStr}T00:00:00`).order('created_at', { ascending: false }).limit(50),
@@ -119,6 +125,10 @@ export default async function DashboardPage({
     // Guests checking out today or still in-house
     supabase.from('guests').select('*').eq('hotel_id', hotel.id)
       .gte('check_out', todayStr).order('check_out', { ascending: true }),
+
+    // Monthly count for free plan cap
+    supabase.from('complaints').select('id', { count: 'exact', head: true })
+      .eq('hotel_id', hotel.id).gte('created_at', monthStart.toISOString()),
   ]);
 
   return (
@@ -131,6 +141,7 @@ export default async function DashboardPage({
       openCount={openCount ?? 0}
       criticalCount={criticalCount ?? 0}
       resolvedTodayCount={resolvedTodayCount ?? 0}
+      monthlyCount={monthlyCount ?? 0}
       justSubscribed={params.success === 'true'}
       isDemo={false}
     />

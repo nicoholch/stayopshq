@@ -69,11 +69,11 @@ const FAQS = [
   },
   {
     q: 'Can I add more departments or staff accounts later?',
-    a: 'Yes, at any time. Starter supports up to 3 departments and 5 staff accounts. Upgrade to Pro for unlimited departments and up to 25 accounts. Enterprise supports unlimited properties and accounts.',
+    a: 'Yes, at any time. Starter supports up to 3 manager accounts with unlimited issue logging. Pro adds AI pattern detection and unlimited managers. Enterprise supports unlimited properties and accounts.',
   },
   {
     q: 'What happens after the 14-day trial ends?',
-    a: 'You will be prompted to choose a plan. If you do nothing, your account moves to read-only — you can view historical data but cannot log new issues. No data is deleted. You can upgrade at any time to resume full access.',
+    a: 'You will be prompted to choose a plan. If you do nothing, your account drops to the Free tier — you can still log up to 30 issues per month and view all historical data. No data is ever deleted. You can upgrade at any time to remove the cap.',
   },
 ];
 
@@ -85,19 +85,60 @@ function CheckCell({ value }: { value: boolean | 'partial' }) {
   return                          <span style={{ color: '#EF4444', fontWeight: 700, fontSize: 18 }}>✕</span>;
 }
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'StayOps HQ',
-  url: 'https://stayopshq.com',
-  description: 'Real-time guest complaint management for luxury hotels and 5-star resorts.',
-  contactPoint: { '@type': 'ContactPoint', email: 'hello@stayopshq.com', contactType: 'customer support' },
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'StayOps HQ',
+    url: 'https://stayopshq.com',
+    description: 'Real-time guest complaint management for luxury hotels and 5-star resorts.',
+    contactPoint: { '@type': 'ContactPoint', email: 'hello@stayopshq.com', contactType: 'customer support' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'StayOps HQ',
+    url: 'https://stayopshq.com',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    description: 'Real-time guest complaint and feedback management platform for luxury hotels and 5-star resorts. Capture issues during the stay, resolve them before checkout, and prevent negative reviews.',
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Free',
+        price: '0',
+        priceCurrency: 'USD',
+        description: '30 issues per month, 1 manager account',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Starter',
+        price: '49',
+        priceCurrency: 'USD',
+        description: 'Unlimited issue logging, up to 3 managers, full analytics',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Pro',
+        price: '149',
+        priceCurrency: 'USD',
+        description: 'Everything in Starter plus AI pattern detection and unlimited managers',
+      },
+    ],
+    provider: {
+      '@type': 'Organization',
+      name: 'StayOps HQ',
+      url: 'https://stayopshq.com',
+    },
+  },
+];
 
 export default function HomePage() {
   return (
     <main style={{ fontFamily: 'var(--font)' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      {jsonLd.map((schema, i) => (
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      ))}
 
       {/* ── Navbar ── */}
       <nav style={{
@@ -413,48 +454,55 @@ export default function HomePage() {
             <span style={{ display: 'inline-block', padding: '6px 16px', borderRadius: 999, fontSize: 12, fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.05em', background: 'rgba(245,196,81,0.15)', color: '#F5C451', border: '1px solid rgba(245,196,81,0.3)', marginBottom: 16 }}>
               Simple Pricing
             </span>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>Start Resolving Issues in Minutes</h2>
-            <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. 14-day free trial on all plans.</p>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', fontWeight: 400, letterSpacing: '-0.02em', color: 'white', marginBottom: 12 }}>Start Free. Upgrade When You&apos;re Ready.</h2>
+            <p style={{ color: '#B8C5D6', fontSize: '1.05rem' }}>No setup fees. No long-term contracts. No credit card required to start.</p>
           </div>
-          <div className="rg-pricing" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, maxWidth: 960, margin: '0 auto' }}>
+          <div className="rg-pricing" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, maxWidth: 1100, margin: '0 auto' }}>
             {[
               {
-                name: 'Starter', price: '$149', period: 'per month / per property', featured: false,
-                features: ['Up to 3 departments', 'Real-time issue logging', 'Live management dashboard', 'Severity triage', 'Up to 5 staff accounts'],
-                cta: 'Get Started Free', ctaStyle: { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' },
+                name: 'Free', price: '$0', period: 'forever', featured: false, stripe: false,
+                features: ['30 issues / month', '1 manager account', 'Live dashboard', 'Guest opportunity database', 'Staff capture link'],
+                cta: 'Start for Free',
               },
               {
-                name: 'Pro', price: '$349', period: 'per month / per property', featured: true,
-                features: ['Unlimited departments', 'AI pattern detection', 'Instant alert system', 'Issue assignment', 'Up to 25 staff accounts', 'Priority support'],
-                cta: 'Start 14-Day Trial', ctaStyle: { background: '#0B1A2B', color: 'white', border: 'none' },
+                name: 'Starter', price: '$49', period: 'per month / per property', featured: true, stripe: true,
+                features: ['Unlimited issue logging', 'Up to 3 managers', 'Full analytics & KPIs', 'Continuous improvement tracking', 'Guest follow-up emails'],
+                cta: 'Start 14-Day Trial',
               },
               {
-                name: 'Enterprise', price: 'Custom', period: 'multi-property / chain', featured: false,
-                features: ['Unlimited properties', 'Cross-property benchmarking', 'Custom AI fine-tuning', 'PMS / POS integrations', 'Dedicated success manager', 'White-label option'],
-                cta: 'Talk to Sales', ctaStyle: { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' },
+                name: 'Pro', price: '$149', period: 'per month / per property', featured: false, stripe: true,
+                features: ['Everything in Starter', 'AI pattern detection', 'Unlimited managers', 'Priority support'],
+                cta: 'Start 14-Day Trial',
+              },
+              {
+                name: 'Enterprise', price: 'Custom', period: 'multi-property / chain', featured: false, stripe: false,
+                features: ['Unlimited properties', 'Cross-property analytics', 'Custom AI fine-tuning', 'PMS / POS integrations', 'Dedicated success manager', 'White-label option'],
+                cta: 'Book a Call',
               },
             ].map(plan => (
-              <div key={plan.name} className={plan.featured ? 'rg-pricing-featured' : ''} style={{ background: plan.featured ? '#F5C451' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#F5C451' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 36, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
+              <div key={plan.name} className={plan.featured ? 'rg-pricing-featured' : ''} style={{ background: plan.featured ? '#F5C451' : 'rgba(255,255,255,0.04)', border: `1px solid ${plan.featured ? '#F5C451' : 'rgba(255,255,255,0.08)'}`, borderRadius: 12, padding: 32, transform: plan.featured ? 'scale(1.03)' : 'none', position: 'relative' as const }}>
                 {plan.featured && (
                   <span style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#0B1A2B', color: '#F5C451', fontSize: 11, fontWeight: 700, padding: '4px 14px', borderRadius: 999, border: '1px solid #F5C451', whiteSpace: 'nowrap' as const }}>
                     Most Popular
                   </span>
                 )}
-                <div style={{ fontSize: 13, fontWeight: 600, color: plan.featured ? 'rgba(13,27,42,0.6)' : 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 16 }}>{plan.name}</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: plan.featured ? '#0B1A2B' : 'white' }}>{plan.price}</div>
-                <div style={{ fontSize: 13, color: plan.featured ? 'rgba(13,27,42,0.5)' : 'rgba(255,255,255,0.4)', marginBottom: 28 }}>{plan.period}</div>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' as const, gap: 12, marginBottom: 32 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: plan.featured ? 'rgba(13,27,42,0.6)' : 'rgba(255,255,255,0.5)', textTransform: 'uppercase' as const, letterSpacing: '0.05em', marginBottom: 16 }}>{plan.name}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.4rem', fontWeight: 400, letterSpacing: '-0.03em', color: plan.featured ? '#0B1A2B' : 'white' }}>{plan.price}</div>
+                <div style={{ fontSize: 12, color: plan.featured ? 'rgba(13,27,42,0.5)' : 'rgba(255,255,255,0.4)', marginBottom: 24 }}>{plan.period}</div>
+                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column' as const, gap: 10, marginBottom: 28 }}>
                   {plan.features.map(f => (
-                    <li key={f} style={{ display: 'flex', gap: 10, fontSize: 14, color: plan.featured ? '#0B1A2B' : 'rgba(255,255,255,0.75)', alignItems: 'flex-start' }}>
-                      <Check size={15} color={plan.featured ? '#0B1A2B' : '#10B981'} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <li key={f} style={{ display: 'flex', gap: 10, fontSize: 13, color: plan.featured ? '#0B1A2B' : 'rgba(255,255,255,0.75)', alignItems: 'flex-start' }}>
+                      <Check size={14} color={plan.featured ? '#0B1A2B' : '#10B981'} strokeWidth={2.5} style={{ flexShrink: 0, marginTop: 2 }} />
                       {f}
                     </li>
                   ))}
                 </ul>
                 {plan.name === 'Enterprise' ? (
-                  <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '14px', borderRadius: 8, fontWeight: 700, fontSize: 14, textDecoration: 'none', boxSizing: 'border-box' as const, ...plan.ctaStyle }}>Book a 15-Min Call</a>
+                  <a href="https://calendly.com/hello-stayopshq/30min" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Book a 15-Min Call</a>
+                ) : plan.name === 'Free' ? (
+                  <a href="/login" style={{ display: 'block', textAlign: 'center' as const, width: '100%', padding: '13px', borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: 'none', boxSizing: 'border-box' as const, border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }}>Start for Free</a>
                 ) : (
-                  <PricingButton plan={plan.name.toLowerCase() as 'starter' | 'pro'} cta={plan.cta} ctaStyle={plan.ctaStyle} />
+                  <PricingButton plan={plan.name.toLowerCase() as 'starter' | 'pro'} cta={plan.cta} ctaStyle={plan.featured ? { background: '#0B1A2B', color: 'white', border: 'none' } : { border: '2px solid #F5C451', color: '#F5C451', background: 'transparent' }} />
                 )}
               </div>
             ))}

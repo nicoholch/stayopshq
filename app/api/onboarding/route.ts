@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       name,
       slug,
       property_type: property_type || null,
-      plan: 'starter',
+      plan: 'free',
       public_page_enabled: public_page_enabled ?? true,
     })
     .select()

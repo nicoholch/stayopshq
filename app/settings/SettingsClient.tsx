@@ -13,6 +13,13 @@ interface TeamMember {
   created_at: string;
 }
 
+const MANAGER_LIMITS: Record<string, number | null> = {
+  free: 1,
+  starter: 3,
+  pro: null,
+  enterprise: null,
+};
+
 interface Props {
   currentUserId: string;
   hotel: Hotel;
@@ -20,11 +27,15 @@ interface Props {
 }
 
 export default function SettingsClient({ currentUserId, hotel, team: initialTeam }: Props) {
+  const plan = hotel.plan ?? 'free';
+  const managerLimit = MANAGER_LIMITS[plan] ?? null;
+  const managerCount = initialTeam.filter(m => m.role === 'manager').length;
   const [team, setTeam]       = useState<TeamMember[]>(initialTeam);
   const [email, setEmail]     = useState('');
   const [sending, setSending] = useState(false);
   const [sent, setSent]       = useState(false);
   const [inviteErr, setInviteErr] = useState('');
+  const [inviteUpgrade, setInviteUpgrade] = useState(false);
   const [removing, setRemoving]   = useState<string | null>(null);
 
   const captureUrl = typeof window !== 'undefined'
@@ -43,6 +54,7 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
     e.preventDefault();
     setSending(true);
     setInviteErr('');
+    setInviteUpgrade(false);
     setSent(false);
     try {
       const res = await fetch('/api/invite', {
@@ -51,7 +63,10 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
         body: JSON.stringify({ email }),
       });
       const body = await res.json();
-      if (!res.ok) throw new Error(body.error ?? 'Failed to send invite');
+      if (!res.ok) {
+        if (body.upgrade) setInviteUpgrade(true);
+        throw new Error(body.error ?? 'Failed to send invite');
+      }
       setSent(true);
       setEmail('');
     } catch (err: unknown) {
@@ -107,9 +122,22 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
             <Mail size={18} color="var(--gold-dark)" strokeWidth={2} />
             <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Invite a Manager</h2>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>
+          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 16 }}>
             Managers get full dashboard access — they can view all guest opportunities, analytics, and improvements.
           </p>
+
+          {managerLimit !== null && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, padding: '8px 12px', background: managerCount >= managerLimit ? 'rgba(239,68,68,0.06)' : 'rgba(245,196,81,0.1)', border: `1px solid ${managerCount >= managerLimit ? 'rgba(239,68,68,0.2)' : 'rgba(245,196,81,0.3)'}`, borderRadius: 8 }}>
+              <span style={{ fontSize: 13, color: managerCount >= managerLimit ? 'var(--danger)' : 'var(--text-muted)', fontWeight: 600 }}>
+                {managerCount} / {managerLimit} managers on {plan.charAt(0).toUpperCase() + plan.slice(1)} plan
+              </span>
+              {managerCount >= managerLimit && (
+                <a href="/api/checkout" onClick={e => { e.preventDefault(); fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: plan === 'free' ? 'starter' : 'pro' }) }).then(r => r.json()).then(d => { if (d.url) window.location.href = d.url; }); }} style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: 'var(--gold)', padding: '4px 12px', borderRadius: 6, textDecoration: 'none', cursor: 'pointer' }}>
+                  Upgrade to {plan === 'free' ? 'Starter' : 'Pro'} →
+                </a>
+              )}
+            </div>
+          )}
 
           <form onSubmit={sendInvite} style={{ display: 'flex', gap: 10 }}>
             <input
@@ -131,8 +159,13 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
             </div>
           )}
           {inviteErr && (
-            <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 8, fontSize: 13, color: 'var(--danger)' }}>
-              {inviteErr}
+            <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 8, fontSize: 13, color: 'var(--danger)', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ flex: 1 }}>{inviteErr}</span>
+              {inviteUpgrade && (
+                <a href="/api/checkout" onClick={e => { e.preventDefault(); fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: plan === 'free' ? 'starter' : 'pro' }) }).then(r => r.json()).then(d => { if (d.url) window.location.href = d.url; }); }} style={{ flexShrink: 0, fontSize: 12, fontWeight: 700, color: 'var(--navy)', background: 'var(--gold)', padding: '5px 14px', borderRadius: 6, textDecoration: 'none', cursor: 'pointer' }}>
+                  Upgrade →
+                </a>
+              )}
             </div>
           )}
         </div>
@@ -142,7 +175,9 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
             <User size={18} color="var(--gold-dark)" strokeWidth={2} />
             <h2 style={{ fontSize: '1rem', fontWeight: 700 }}>Team Members</h2>
-            <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>{team.length} member{team.length !== 1 ? 's' : ''}</span>
+            <span style={{ marginLeft: 'auto', fontSize: 12, color: 'var(--text-muted)', fontWeight: 600 }}>
+              {managerLimit !== null ? `${managerCount} / ${managerLimit} managers` : `${team.length} member${team.length !== 1 ? 's' : ''}`}
+            </span>
           </div>
 
           {team.length === 0 ? (
