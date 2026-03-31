@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, ComplaintSeverity, ComplaintStatus, Department } from '@/types';
-import { Check } from 'lucide-react';
+import { Check, Pencil } from 'lucide-react';
 import AppNav from '@/app/components/AppNav';
 
 interface Props {
@@ -31,6 +31,11 @@ const DEPARTMENTS: Department[] = [
   'Spa & Fitness', 'Pool & Beach', 'Valet & Transport', 'Activities', 'Maintenance',
 ];
 
+const CATEGORIES = [
+  'Room Condition', 'Cleanliness', 'Noise', 'Temperature / AC', 'Maintenance',
+  'Staff Behavior', 'Food & Beverage', 'Wait Times', 'Billing', 'Other',
+];
+
 type DateRange = '7d' | '30d' | '90d' | 'all';
 
 export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
@@ -48,6 +53,58 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
   const [compensation, setCompensation] = useState('');
   const [satisfaction, setSatisfaction] = useState<number | null>(null);
   const [submitting, setSubmitting]     = useState(false);
+
+  // ── Edit inline ───────────────────────────────────────────────────
+  const [editingId, setEditingId]       = useState<string | null>(null);
+  const [editDept, setEditDept]         = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editSeverity, setEditSeverity] = useState('');
+  const [editStatus, setEditStatus]     = useState('');
+  const [editDescription, setEditDesc]  = useState('');
+  const [editRoom, setEditRoom]         = useState('');
+  const [editSaving, setEditSaving]     = useState(false);
+  const [editErr, setEditErr]           = useState('');
+
+  function openEdit(c: Complaint) {
+    setEditingId(c.id);
+    setEditDept(c.department);
+    setEditCategory(c.category);
+    setEditSeverity(c.severity);
+    setEditStatus(c.status);
+    setEditDesc(c.description);
+    setEditRoom(c.room_number ?? '');
+    setEditErr('');
+  }
+
+  async function submitEdit(c: Complaint) {
+    if (!editDescription.trim()) return;
+    setEditSaving(true);
+    setEditErr('');
+    const update = {
+      department:  editDept as Department,
+      category:    editCategory as Complaint['category'],
+      severity:    editSeverity as ComplaintSeverity,
+      status:      editStatus as ComplaintStatus,
+      description: editDescription.trim(),
+      room_number: editRoom.trim() || null,
+    };
+    if (!isDemo) {
+      const res = await fetch(`/api/complaints/${c.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(update),
+      });
+      if (!res.ok) {
+        const body = await res.json();
+        setEditErr(body.error ?? 'Failed to save');
+        setEditSaving(false);
+        return;
+      }
+    }
+    setComplaints(prev => prev.map(x => x.id === c.id ? { ...x, ...update } : x));
+    setEditingId(null);
+    setEditSaving(false);
+  }
 
   async function submitResolve(c: Complaint) {
     if (!resolution.trim() || satisfaction === null) return;
@@ -213,34 +270,90 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                   {isOpen && (
                     <div style={{ padding: '20px 24px 24px', background: 'var(--off-white)', borderTop: '1px solid var(--border)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
 
-                      {/* Left: full complaint + resolution */}
+                      {/* Left: full complaint + resolution OR edit form */}
                       <div>
-                        <div style={{ marginBottom: 16 }}>
-                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 6 }}>Guest Opportunity</div>
-                          <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{c.description}</p>
-                        </div>
+                        {editingId === c.id ? (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} onClick={e => e.stopPropagation()}>
+                            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--gold-dark)', marginBottom: 2 }}>Edit Guest Opportunity</div>
 
-                        {c.resolution && (
-                          <div style={{ marginBottom: 12 }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--success)', marginBottom: 6 }}>Resolution</div>
-                            <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{c.resolution}</p>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                              <div>
+                                <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Department</label>
+                                <select value={editDept} onChange={e => setEditDept(e.target.value)} style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'white' }}>
+                                  {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                                </select>
+                              </div>
+                              <div>
+                                <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Category</label>
+                                <select value={editCategory} onChange={e => setEditCategory(e.target.value)} style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'white' }}>
+                                  {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                                </select>
+                              </div>
+                              <div>
+                                <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Severity</label>
+                                <select value={editSeverity} onChange={e => setEditSeverity(e.target.value)} style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'white' }}>
+                                  {['low', 'medium', 'high', 'critical'].map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                                </select>
+                              </div>
+                              <div>
+                                <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Status</label>
+                                <select value={editStatus} onChange={e => setEditStatus(e.target.value)} style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', background: 'white' }}>
+                                  <option value="open">Open</option>
+                                  <option value="in_progress">In Progress</option>
+                                  <option value="resolved">Resolved</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div>
+                              <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Room Number</label>
+                              <input type="text" value={editRoom} onChange={e => setEditRoom(e.target.value)} placeholder="e.g. 204" style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', boxSizing: 'border-box' }} />
+                            </div>
+
+                            <div>
+                              <label style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 4 }}>Description</label>
+                              <textarea value={editDescription} onChange={e => setEditDesc(e.target.value)} rows={3} style={{ width: '100%', padding: '7px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }} />
+                            </div>
+
+                            {editErr && <p style={{ fontSize: 12, color: 'var(--danger)', margin: 0 }}>{editErr}</p>}
+
+                            <div style={{ display: 'flex', gap: 8 }}>
+                              <button onClick={() => submitEdit(c)} disabled={!editDescription.trim() || editSaving} style={{ flex: 1, padding: '9px', background: 'var(--navy)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: editDescription.trim() ? 1 : 0.5 }}>
+                                {editSaving ? 'Saving…' : 'Save Changes'}
+                              </button>
+                              <button onClick={() => setEditingId(null)} style={{ padding: '9px 14px', border: '1.5px solid var(--border)', background: 'white', borderRadius: 6, fontSize: 13, cursor: 'pointer', color: 'var(--text-muted)' }}>Cancel</button>
+                            </div>
                           </div>
-                        )}
-                        {c.compensation && (
-                          <div style={{ marginBottom: 12 }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4 }}>Compensation</div>
-                            <p style={{ fontSize: 14, color: 'var(--text)', margin: 0 }}>{c.compensation}</p>
-                          </div>
-                        )}
-                        {c.guest_satisfaction && (
-                          <div>
-                            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4 }}>Guest Satisfaction</div>
-                            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--gold-dark)', margin: 0 }}>{c.guest_satisfaction}/5 — {SAT_LABELS[c.guest_satisfaction]}</p>
-                          </div>
+                        ) : (
+                          <>
+                            <div style={{ marginBottom: 16 }}>
+                              <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 6 }}>Guest Opportunity</div>
+                              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{c.description}</p>
+                            </div>
+
+                            {c.resolution && (
+                              <div style={{ marginBottom: 12 }}>
+                                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--success)', marginBottom: 6 }}>Resolution</div>
+                                <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 }}>{c.resolution}</p>
+                              </div>
+                            )}
+                            {c.compensation && (
+                              <div style={{ marginBottom: 12 }}>
+                                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4 }}>Compensation</div>
+                                <p style={{ fontSize: 14, color: 'var(--text)', margin: 0 }}>{c.compensation}</p>
+                              </div>
+                            )}
+                            {c.guest_satisfaction && (
+                              <div>
+                                <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', marginBottom: 4 }}>Guest Satisfaction</div>
+                                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--gold-dark)', margin: 0 }}>{c.guest_satisfaction}/5 — {SAT_LABELS[c.guest_satisfaction]}</p>
+                              </div>
+                            )}
+                          </>
                         )}
                       </div>
 
-                      {/* Right: metadata + resolve action */}
+                      {/* Right: metadata + actions */}
                       <div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 20 }}>
                           {[
@@ -256,44 +369,53 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                           ))}
                         </div>
 
-                        {/* Inline resolve form */}
-                        {c.status !== 'resolved' && !resolving && (
-                          <button onClick={(e) => { e.stopPropagation(); setResolvingId(c.id); setResolution(''); setCompensation(''); setSatisfaction(null); }} style={{ padding: '9px 18px', border: '1.5px solid var(--success)', color: 'var(--success)', background: 'transparent', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Resolve this guest opportunity</span>
-                          </button>
-                        )}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                          {/* Edit button */}
+                          {editingId !== c.id && !resolving && (
+                            <button onClick={(e) => { e.stopPropagation(); openEdit(c); setResolvingId(null); }} style={{ padding: '9px 18px', border: '1.5px solid var(--border)', color: 'var(--text)', background: 'white', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <Pencil size={13} strokeWidth={2.5} />Edit this opportunity
+                            </button>
+                          )}
 
-                        {resolving && (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} onClick={e => e.stopPropagation()}>
-                            <textarea value={resolution} onChange={e => setResolution(e.target.value)} placeholder="How was this resolved?" rows={2} style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }} />
-                            <input type="text" value={compensation} onChange={e => setCompensation(e.target.value)} placeholder="Compensation (optional, e.g. $50 credit)" style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', boxSizing: 'border-box' }} />
-                            <div style={{ display: 'flex', gap: 5 }}>
-                              {([
-                                [1, '#EF4444'], [2, '#F97316'], [3, '#EAB308'], [4, '#22C55E'], [5, '#059669'],
-                              ] as [number, string][]).map(([n, color]) => {
-                                const selected = satisfaction === n;
-                                return (
-                                  <button key={n} onClick={() => setSatisfaction(n)} style={{
-                                    flex: 1, padding: '6px 2px', borderRadius: 6, cursor: 'pointer',
-                                    border: `2px solid ${selected ? color : 'var(--border)'}`,
-                                    background: selected ? `${color}20` : 'white',
-                                    transition: 'all 0.15s', display: 'flex', flexDirection: 'column',
-                                    alignItems: 'center', gap: 2,
-                                  }}>
-                                    <span style={{ fontSize: 13, fontWeight: 800, color: selected ? color : 'var(--text-muted)' }}>{n}</span>
-                                    <span style={{ fontSize: 9, fontWeight: 700, color: selected ? color : 'var(--text-muted)', lineHeight: 1.2, textAlign: 'center' }}>{SAT_LABELS[n]}</span>
-                                  </button>
-                                );
-                              })}
+                          {/* Inline resolve form */}
+                          {c.status !== 'resolved' && !resolving && editingId !== c.id && (
+                            <button onClick={(e) => { e.stopPropagation(); setResolvingId(c.id); setResolution(''); setCompensation(''); setSatisfaction(null); }} style={{ padding: '9px 18px', border: '1.5px solid var(--success)', color: 'var(--success)', background: 'transparent', borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+                              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Resolve this guest opportunity</span>
+                            </button>
+                          )}
+
+                          {resolving && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} onClick={e => e.stopPropagation()}>
+                              <textarea value={resolution} onChange={e => setResolution(e.target.value)} placeholder="How was this resolved?" rows={2} style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }} />
+                              <input type="text" value={compensation} onChange={e => setCompensation(e.target.value)} placeholder="Compensation (optional, e.g. $50 credit)" style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', boxSizing: 'border-box' }} />
+                              <div style={{ display: 'flex', gap: 5 }}>
+                                {([
+                                  [1, '#EF4444'], [2, '#F97316'], [3, '#EAB308'], [4, '#22C55E'], [5, '#059669'],
+                                ] as [number, string][]).map(([n, color]) => {
+                                  const selected = satisfaction === n;
+                                  return (
+                                    <button key={n} onClick={() => setSatisfaction(n)} style={{
+                                      flex: 1, padding: '6px 2px', borderRadius: 6, cursor: 'pointer',
+                                      border: `2px solid ${selected ? color : 'var(--border)'}`,
+                                      background: selected ? `${color}20` : 'white',
+                                      transition: 'all 0.15s', display: 'flex', flexDirection: 'column',
+                                      alignItems: 'center', gap: 2,
+                                    }}>
+                                      <span style={{ fontSize: 13, fontWeight: 800, color: selected ? color : 'var(--text-muted)' }}>{n}</span>
+                                      <span style={{ fontSize: 9, fontWeight: 700, color: selected ? color : 'var(--text-muted)', lineHeight: 1.2, textAlign: 'center' }}>{SAT_LABELS[n]}</span>
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                              <div style={{ display: 'flex', gap: 8 }}>
+                                <button onClick={() => submitResolve(c)} disabled={!resolution.trim() || satisfaction === null || submitting} style={{ flex: 1, padding: '9px', background: 'var(--success)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: resolution.trim() && satisfaction !== null ? 1 : 0.5 }}>
+                                  {submitting ? 'Saving…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Mark Resolved</span>}
+                                </button>
+                                <button onClick={() => setResolvingId(null)} style={{ padding: '9px 14px', border: '1.5px solid var(--border)', background: 'white', borderRadius: 6, fontSize: 13, cursor: 'pointer', color: 'var(--text-muted)' }}>Cancel</button>
+                              </div>
                             </div>
-                            <div style={{ display: 'flex', gap: 8 }}>
-                              <button onClick={() => submitResolve(c)} disabled={!resolution.trim() || satisfaction === null || submitting} style={{ flex: 1, padding: '9px', background: 'var(--success)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: resolution.trim() && satisfaction !== null ? 1 : 0.5 }}>
-                                {submitting ? 'Saving…' : <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}><Check size={13} strokeWidth={2.5} />Mark Resolved</span>}
-                              </button>
-                              <button onClick={() => setResolvingId(null)} style={{ padding: '9px 14px', border: '1.5px solid var(--border)', background: 'white', borderRadius: 6, fontSize: 13, cursor: 'pointer', color: 'var(--text-muted)' }}>Cancel</button>
-                            </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}

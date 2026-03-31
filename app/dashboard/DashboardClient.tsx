@@ -9,7 +9,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, Guest, Hotel, DepartmentComplaintCount, ComplaintSeverity, ComplaintStatus } from '@/types';
-import { AlertTriangle, AlertCircle, Info, Check, Mail, Sparkles } from 'lucide-react';
+import { AlertTriangle, AlertCircle, Info, Check, Mail, Sparkles, Pencil } from 'lucide-react';
 import AppNav from '@/app/components/AppNav';
 
 interface Props {
@@ -45,6 +45,16 @@ const STATUS_BORDER: Record<ComplaintStatus, string> = {
 };
 
 const SAT_LABELS: Record<number, string> = { 1: 'Unsatisfied', 2: 'Dissatisfied', 3: 'Neutral', 4: 'Satisfied', 5: 'Very Satisfied' };
+
+const DEPARTMENTS = [
+  'Front Desk', 'Housekeeping', 'Food & Beverage', 'Concierge',
+  'Spa & Fitness', 'Pool & Beach', 'Valet & Transport', 'Activities', 'Maintenance',
+];
+
+const CATEGORIES = [
+  'Room Condition', 'Cleanliness', 'Noise', 'Temperature / AC', 'Maintenance',
+  'Staff Behavior', 'Food & Beverage', 'Wait Times', 'Billing', 'Other',
+];
 
 function StaffCaptureLink({ slug }: { slug: string }) {
   const [copied, setCopied] = useState(false);
@@ -139,9 +149,51 @@ export default function DashboardClient({
 
   function openResolveForm(id: string) {
     setResolvingId(id);
+    setEditingId(null);
     setResolution(''); setCompensation(''); setSatisfaction(null);
   }
   function cancelResolve() { setResolvingId(null); }
+
+  // ── Edit inline ───────────────────────────────────────────────────
+  const [editingId, setEditingId]       = useState<string | null>(null);
+  const [editDept, setEditDept]         = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editSeverity, setEditSeverity] = useState('');
+  const [editDescription, setEditDesc]  = useState('');
+  const [editRoom, setEditRoom]         = useState('');
+  const [editSaving, setEditSaving]     = useState(false);
+
+  function openEdit(c: Complaint) {
+    setEditingId(c.id);
+    setResolvingId(null);
+    setEditDept(c.department);
+    setEditCategory(c.category);
+    setEditSeverity(c.severity);
+    setEditDesc(c.description);
+    setEditRoom(c.room_number ?? '');
+  }
+
+  async function submitEdit(c: Complaint) {
+    if (!editDescription.trim()) return;
+    setEditSaving(true);
+    const update = {
+      department:  editDept as import('@/types').Department,
+      category:    editCategory as Complaint['category'],
+      severity:    editSeverity as ComplaintSeverity,
+      description: editDescription.trim(),
+      room_number: editRoom.trim() || null,
+    };
+    if (!isDemo) {
+      await fetch(`/api/complaints/${c.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(update),
+      });
+    }
+    setComplaints(prev => prev.map(x => x.id === c.id ? { ...x, ...update } : x));
+    setEditingId(null);
+    setEditSaving(false);
+  }
 
   async function submitResolve(complaint: Complaint) {
     if (!resolution.trim() || satisfaction === null) return;
@@ -335,6 +387,7 @@ export default function DashboardClient({
                 const sev = SEVERITY_STYLE[c.severity];
                 const sta = STATUS_STYLE[c.status];
                 const isResolving = resolvingId === c.id;
+                const isEditing   = editingId === c.id;
                 const canResolve  = c.status !== 'resolved';
 
                 return (
@@ -362,26 +415,74 @@ export default function DashboardClient({
                         <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                           {new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
-                        {canResolve && !isResolving && (
-                          <button onClick={() => openResolveForm(c.id)} style={{
-                            fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 6,
-                            border: '1px solid var(--success)', color: 'var(--success)',
-                            background: 'transparent', cursor: 'pointer',
-                          }}>
-                            <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 3 }} />Resolve
-                          </button>
-                        )}
-                        {canResolve && isResolving && (
-                          <button onClick={cancelResolve} style={{
-                            fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
-                            border: '1px solid var(--border)', color: 'var(--text-muted)',
-                            background: 'transparent', cursor: 'pointer',
-                          }}>
-                            Cancel
-                          </button>
-                        )}
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          {!isResolving && !isEditing && (
+                            <button onClick={() => openEdit(c)} style={{
+                              fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
+                              border: '1px solid var(--border)', color: 'var(--text-muted)',
+                              background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+                            }}>
+                              <Pencil size={10} strokeWidth={2.5} />Edit
+                            </button>
+                          )}
+                          {canResolve && !isResolving && !isEditing && (
+                            <button onClick={() => openResolveForm(c.id)} style={{
+                              fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 6,
+                              border: '1px solid var(--success)', color: 'var(--success)',
+                              background: 'transparent', cursor: 'pointer',
+                            }}>
+                              <Check size={11} strokeWidth={2.5} style={{ display: 'inline', marginRight: 3 }} />Resolve
+                            </button>
+                          )}
+                          {(isResolving || isEditing) && (
+                            <button onClick={() => { cancelResolve(); setEditingId(null); }} style={{
+                              fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6,
+                              border: '1px solid var(--border)', color: 'var(--text-muted)',
+                              background: 'transparent', cursor: 'pointer',
+                            }}>
+                              Cancel
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
+
+                    {/* ── Edit form (inline) ── */}
+                    {isEditing && (
+                      <div style={{ padding: '14px', borderTop: '1px solid var(--border)', background: 'white', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                          <div>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>Department</label>
+                            <select value={editDept} onChange={e => setEditDept(e.target.value)} style={{ width: '100%', padding: '6px 8px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: 'white' }}>
+                              {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>Category</label>
+                            <select value={editCategory} onChange={e => setEditCategory(e.target.value)} style={{ width: '100%', padding: '6px 8px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: 'white' }}>
+                              {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>Severity</label>
+                            <select value={editSeverity} onChange={e => setEditSeverity(e.target.value)} style={{ width: '100%', padding: '6px 8px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 12, fontFamily: 'inherit', background: 'white' }}>
+                              {['low', 'medium', 'high', 'critical'].map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                            </select>
+                          </div>
+                          <div>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>Room</label>
+                            <input type="text" value={editRoom} onChange={e => setEditRoom(e.target.value)} placeholder="e.g. 204" style={{ width: '100%', padding: '6px 8px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 12, fontFamily: 'inherit', boxSizing: 'border-box' }} />
+                          </div>
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: 3 }}>Description</label>
+                          <textarea value={editDescription} onChange={e => setEditDesc(e.target.value)} rows={2} style={{ width: '100%', padding: '7px 8px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'vertical', boxSizing: 'border-box' }} />
+                        </div>
+                        <button onClick={() => submitEdit(c)} disabled={!editDescription.trim() || editSaving} style={{ padding: '8px', background: 'var(--navy)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: editDescription.trim() ? 1 : 0.5 }}>
+                          {editSaving ? 'Saving…' : 'Save Changes'}
+                        </button>
+                      </div>
+                    )}
 
                     {/* ── Resolve form (inline) ── */}
                     {isResolving && (
