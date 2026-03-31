@@ -203,6 +203,19 @@ export default function AnalyticsClient({ complaints }: Props) {
       <AppNav />
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 64px' }}>
 
+        {/* Data-readiness banner */}
+        {complaints.length < 20 && (
+          <div style={{ background: 'rgba(245,196,81,0.08)', border: '1px solid rgba(245,196,81,0.25)', borderRadius: 10, padding: '14px 20px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 20 }}>📈</span>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--gold-dark)' }}>Your data is building up — {complaints.length} of 20 entries logged.</span>
+              <span style={{ fontSize: 13, color: 'var(--text-muted)', marginLeft: 8 }}>
+                Keep logging guest opportunities and your trend lines, satisfaction scores, and department breakdowns will take shape.
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28, flexWrap: 'wrap', gap: 16 }}>
           <div>

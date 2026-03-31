@@ -355,6 +355,19 @@ export default function ImprovementsClient({ complaints }: Props) {
       <AppNav />
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 64px' }}>
 
+        {/* Data-readiness banner */}
+        {complaints.length < 20 && (
+          <div style={{ background: 'rgba(245,196,81,0.08)', border: '1px solid rgba(245,196,81,0.25)', borderRadius: 10, padding: '14px 20px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 20 }}>🔍</span>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--gold-dark)' }}>Patterns emerge after 20+ entries — you've logged {complaints.length} so far.</span>
+              <span style={{ fontSize: 13, color: 'var(--text-muted)', marginLeft: 8 }}>
+                Once you have enough data, this page automatically detects recurring issues, worsening trends, and room hotspots.
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 32, flexWrap: 'wrap', gap: 16 }}>
           <div>

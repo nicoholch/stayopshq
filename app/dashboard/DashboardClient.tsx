@@ -258,6 +258,29 @@ export default function DashboardClient({
   const isPro = hotel.plan === 'pro' || hotel.plan === 'enterprise';
   const maxDeptCount = deptCounts.length ? Math.max(...deptCounts.map(d => d.total_count)) : 1;
 
+  // ── Milestone toasts ──────────────────────────────────────────────
+  const [milestoneMsg, setMilestoneMsg] = useState<string | null>(null);
+  const MILESTONES = [10, 25, 50, 100, 250];
+  const MILESTONE_COPY: Record<number, string> = {
+    10:  '🎉 10 guest opportunities logged! You\'re building real operational data.',
+    25:  '📊 25 opportunities logged — patterns are starting to emerge.',
+    50:  '🏆 50 issues logged and tracked. Your team is on top of it.',
+    100: '💡 100 guest opportunities recorded. Your data is now telling a clear story.',
+    250: '🚀 250 entries. You\'re running a data-driven operation.',
+  };
+  useEffect(() => {
+    if (isDemo) return;
+    const total = complaints.length;
+    const key = `milestone_shown_${hotel.id}`;
+    const shown: number[] = JSON.parse(localStorage.getItem(key) ?? '[]');
+    const hit = MILESTONES.find(m => total >= m && !shown.includes(m));
+    if (hit) {
+      setMilestoneMsg(MILESTONE_COPY[hit]);
+      localStorage.setItem(key, JSON.stringify([...shown, hit]));
+      setTimeout(() => setMilestoneMsg(null), 7000);
+    }
+  }, [complaints.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const [portalLoading, setPortalLoading] = useState(false);
 
   async function manageBilling() {
@@ -274,6 +297,18 @@ export default function DashboardClient({
   return (
     <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: '72px' }}>
       <AppNav />
+
+      {/* Milestone toast */}
+      {milestoneMsg && (
+        <div style={{
+          position: 'fixed', top: 80, left: '50%', transform: 'translateX(-50%)',
+          zIndex: 9999, background: 'var(--navy)', border: '1px solid rgba(245,196,81,0.4)',
+          borderRadius: 12, padding: '14px 24px', color: 'white', fontSize: 14, fontWeight: 600,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3)', whiteSpace: 'nowrap',
+        }}>
+          {milestoneMsg}
+        </div>
+      )}
 
       {/* Demo mode banner */}
       {isDemo && (
@@ -665,13 +700,7 @@ export default function DashboardClient({
 
         {/* Pro gate: AI Insights */}
         {!isPro && (
-          <div style={{ marginTop: 24, background: 'var(--navy)', borderRadius: 12, padding: 32, textAlign: 'center', color: 'white' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 12 }}><Sparkles size={22} color="#F5C451" strokeWidth={1.75} /><span style={{ fontSize: '1.2rem', fontWeight: 700 }}>AI Insights</span></div>
-            <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 20, fontSize: 15 }}>
-              Upgrade to Pro to get AI-generated pattern detection, repeat guest opportunity identification, and prioritized resolution recommendations.
-            </p>
-            <UpgradeToPro />
-          </div>
+          <SmartUpgradeNudge complaints={complaints} />
         )}
       </div>
 
@@ -696,9 +725,29 @@ function formatStayDates(checkIn: string, checkOut: string): string {
   return `${fmt(checkIn)} – ${fmt(checkOut)}`;
 }
 
-// ── Stripe checkout button ────────────────────────────────────────────────────
-function UpgradeToPro() {
+// ── Smart upgrade nudge ───────────────────────────────────────────────────────
+function SmartUpgradeNudge({ complaints }: { complaints: Complaint[] }) {
   const [loading, setLoading] = useState(false);
+
+  const total    = complaints.length;
+  const resolved = complaints.filter(c => c.status === 'resolved').length;
+  const satScores = complaints.filter(c => c.guest_satisfaction).map(c => c.guest_satisfaction as number);
+  const avgSat   = satScores.length ? (satScores.reduce((a, b) => a + b, 0) / satScores.length).toFixed(1) : null;
+
+  // Top department
+  const deptMap = new Map<string, number>();
+  for (const c of complaints) deptMap.set(c.department, (deptMap.get(c.department) ?? 0) + 1);
+  const topDept = [...deptMap.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+
+  const isReady = total >= 10;
+
+  const headline = isReady
+    ? `You've logged ${total} guest opportunities — your data is ready.`
+    : `Log ${10 - total} more ${10 - total === 1 ? 'issue' : 'issues'} to unlock AI Insights.`;
+
+  const subtext = isReady
+    ? `${resolved} resolved${avgSat ? `, avg satisfaction ${avgSat}/5` : ''}${topDept ? `, most active: ${topDept}` : ''}. Upgrade to Pro for AI-generated pattern detection, repeat issue identification, and prioritized recommendations built from your real data.`
+    : `AI Insights analyses your complaint patterns, flags recurring problems, and gives your team prioritized action recommendations. The more you log, the more powerful it gets.`;
 
   async function handleUpgrade() {
     setLoading(true);
@@ -718,16 +767,32 @@ function UpgradeToPro() {
   }
 
   return (
-    <button
-      onClick={handleUpgrade}
-      disabled={loading}
-      style={{
-        padding: '14px 32px', background: 'var(--gold)', color: 'var(--navy)',
-        border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 15,
-        cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
-      }}
-    >
-      {loading ? 'Redirecting to Stripe…' : 'Upgrade to Pro — $349/mo'}
-    </button>
+    <div style={{ marginTop: 24, background: 'var(--navy)', borderRadius: 12, padding: 32, color: 'white' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 280 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+            <Sparkles size={20} color="#F5C451" strokeWidth={1.75} />
+            <span style={{ fontSize: '1rem', fontWeight: 700 }}>AI Insights</span>
+            <span style={{ fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: 'rgba(245,196,81,0.15)', color: '#F5C451' }}>PRO</span>
+          </div>
+          <p style={{ fontSize: '1.05rem', fontWeight: 700, color: 'white', margin: '0 0 8px', lineHeight: 1.4 }}>{headline}</p>
+          <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>{subtext}</p>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, flexShrink: 0 }}>
+          {isReady ? (
+            <button onClick={handleUpgrade} disabled={loading} style={{ padding: '12px 28px', background: '#F5C451', color: '#0B1A2B', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 14, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, whiteSpace: 'nowrap' }}>
+              {loading ? 'Redirecting…' : 'Unlock AI Insights — $349/mo'}
+            </button>
+          ) : (
+            <div style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '12px 20px', textAlign: 'center' }}>
+              <div style={{ fontSize: 24, fontWeight: 800, color: '#F5C451' }}>{total}<span style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>/10</span></div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginTop: 2 }}>entries logged</div>
+            </div>
+          )}
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.3)', margin: 0 }}>Cancel anytime</p>
+        </div>
+      </div>
+    </div>
   );
 }
