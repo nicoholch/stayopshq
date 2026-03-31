@@ -9,6 +9,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'StayOps HQ — Guest Complaint Management for Luxury Hotels',
   description: 'Log, track, and resolve every guest issue before checkout. Real-time complaint management built for 5-star hotels and resorts. Staff log issues in 30 seconds.',
+  alternates: { canonical: 'https://stayopshq.com' },
   openGraph: {
     title: 'StayOps HQ — Guest Complaint Management for Luxury Hotels',
     description: 'Real-time complaint tracking for 5-star hotels. Staff log issues in 30 seconds. Management resolves them before the guest checks out.',

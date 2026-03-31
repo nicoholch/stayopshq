@@ -5,6 +5,7 @@ import { ConciergeBell } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'About',
   description: 'Learn about StayOps HQ and our mission to help luxury hotels resolve guest issues in real time.',
+  alternates: { canonical: 'https://stayopshq.com/about' },
 };
 
 export default function AboutPage() {

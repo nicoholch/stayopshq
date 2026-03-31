@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, Guest, Hotel, DepartmentComplaintCount, ComplaintSeverity, ComplaintStatus } from '@/types';
 import { AlertTriangle, AlertCircle, Info, Check, Mail, Sparkles } from 'lucide-react';
+import AppNav from '@/app/components/AppNav';
 
 interface Props {
   hotel: Hotel;
@@ -220,6 +221,7 @@ export default function DashboardClient({
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: '72px' }}>
+      <AppNav />
 
       {/* Demo mode banner */}
       {isDemo && (
@@ -265,18 +267,6 @@ export default function DashboardClient({
               {portalLoading ? 'Loading…' : 'Manage Billing'}
             </button>
           )}
-          <a href="/analytics" style={{ padding: '9px 18px', border: '2px solid var(--border)', color: 'var(--text-muted)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            Analytics
-          </a>
-          <a href="/improvements" style={{ padding: '9px 18px', border: '2px solid var(--border)', color: 'var(--text-muted)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            Improvements
-          </a>
-          <a href="/complaints" style={{ padding: '9px 18px', border: '2px solid var(--gold)', color: 'var(--gold-dark)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            All Guest Opportunities →
-          </a>
-          <a href="/capture" style={{ padding: '9px 18px', background: 'var(--gold)', color: 'var(--navy)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            + Log Guest Opportunity
-          </a>
         </div>
 
         {/* KPI cards */}
@@ -424,24 +414,25 @@ export default function DashboardClient({
                           <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'block', marginBottom: 5 }}>
                             Guest Satisfaction <span style={{ color: 'var(--danger)' }}>*</span>
                           </label>
-                          <div style={{ display: 'flex', gap: 6 }}>
-                            {[1, 2, 3, 4, 5].map(n => (
-                              <button key={n} onClick={() => setSatisfaction(n)} title={SAT_LABELS[n]} style={{
-                                flex: 1, padding: '7px 0', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer',
-                                border: `2px solid ${satisfaction === n ? 'var(--gold)' : 'var(--border)'}`,
-                                background: satisfaction === n ? 'rgba(245,196,81,0.15)' : 'transparent',
-                                color: satisfaction === n ? 'var(--gold-dark)' : 'var(--text-muted)',
-                                transition: 'all 0.15s',
-                              }}>
-                                {n}
-                              </button>
-                            ))}
+                          <div style={{ display: 'flex', gap: 5 }}>
+                            {([
+                              [1, '#EF4444'], [2, '#F97316'], [3, '#EAB308'], [4, '#22C55E'], [5, '#059669'],
+                            ] as [number, string][]).map(([n, color]) => {
+                              const selected = satisfaction === n;
+                              return (
+                                <button key={n} onClick={() => setSatisfaction(n)} style={{
+                                  flex: 1, padding: '6px 2px', borderRadius: 6, cursor: 'pointer',
+                                  border: `2px solid ${selected ? color : 'var(--border)'}`,
+                                  background: selected ? `${color}20` : 'white',
+                                  transition: 'all 0.15s', display: 'flex', flexDirection: 'column',
+                                  alignItems: 'center', gap: 2,
+                                }}>
+                                  <span style={{ fontSize: 13, fontWeight: 800, color: selected ? color : 'var(--text-muted)' }}>{n}</span>
+                                  <span style={{ fontSize: 9, fontWeight: 700, color: selected ? color : 'var(--text-muted)', lineHeight: 1.2, textAlign: 'center' }}>{SAT_LABELS[n]}</span>
+                                </button>
+                              );
+                            })}
                           </div>
-                          {satisfaction && (
-                            <div style={{ fontSize: 11, color: 'var(--gold-dark)', marginTop: 4, fontWeight: 600 }}>
-                              {SAT_LABELS[satisfaction]}
-                            </div>
-                          )}
                         </div>
                         <button
                           onClick={() => submitResolve(c)}

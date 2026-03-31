@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Privacy Policy — StayOps HQ' };
+export const metadata = { title: 'Privacy Policy — StayOps HQ', alternates: { canonical: 'https://stayopshq.com/privacy' } };
 
 export default function PrivacyPage() {
   const section = (title: string, children: React.ReactNode) => (

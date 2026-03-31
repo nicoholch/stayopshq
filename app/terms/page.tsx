@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Terms of Service — StayOps HQ' };
+export const metadata = { title: 'Terms of Service — StayOps HQ', alternates: { canonical: 'https://stayopshq.com/terms' } };
 
 export default function TermsPage() {
   const section = (title: string, children: React.ReactNode) => (

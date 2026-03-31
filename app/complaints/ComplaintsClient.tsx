@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { Complaint, ComplaintSeverity, ComplaintStatus, Department } from '@/types';
 import { Check } from 'lucide-react';
+import AppNav from '@/app/components/AppNav';
 
 interface Props {
   initialComplaints: Complaint[];
@@ -110,7 +111,8 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: 88 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: 72 }}>
+      <AppNav />
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 64px' }}>
 
         {/* Header */}
@@ -119,9 +121,6 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
             <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: 4 }}>Guest Opportunity Database</h1>
             <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>Full guest opportunity history with lifecycle data — log, resolution, compensation, and guest satisfaction.</p>
           </div>
-          <a href="/capture" style={{ padding: '9px 18px', background: 'var(--gold)', color: 'var(--navy)', borderRadius: 8, fontWeight: 600, fontSize: 13, textDecoration: 'none' }}>
-            + Log Guest Opportunity
-          </a>
         </div>
 
         {/* Stats strip */}
@@ -268,10 +267,24 @@ export default function ComplaintsClient({ initialComplaints, isDemo }: Props) {
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }} onClick={e => e.stopPropagation()}>
                             <textarea value={resolution} onChange={e => setResolution(e.target.value)} placeholder="How was this resolved?" rows={2} style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', resize: 'none', boxSizing: 'border-box' }} />
                             <input type="text" value={compensation} onChange={e => setCompensation(e.target.value)} placeholder="Compensation (optional, e.g. $50 credit)" style={{ width: '100%', padding: '8px 10px', border: '1.5px solid var(--border)', borderRadius: 6, fontSize: 13, fontFamily: 'inherit', boxSizing: 'border-box' }} />
-                            <div style={{ display: 'flex', gap: 6 }}>
-                              {[1,2,3,4,5].map(n => (
-                                <button key={n} onClick={() => setSatisfaction(n)} title={SAT_LABELS[n]} style={{ flex: 1, padding: '7px 0', borderRadius: 6, fontSize: 13, fontWeight: 700, cursor: 'pointer', border: `2px solid ${satisfaction === n ? 'var(--gold)' : 'var(--border)'}`, background: satisfaction === n ? 'rgba(201,168,76,0.15)' : 'white', color: satisfaction === n ? 'var(--gold-dark)' : 'var(--text-muted)', transition: 'all 0.15s' }}>{n}</button>
-                              ))}
+                            <div style={{ display: 'flex', gap: 5 }}>
+                              {([
+                                [1, '#EF4444'], [2, '#F97316'], [3, '#EAB308'], [4, '#22C55E'], [5, '#059669'],
+                              ] as [number, string][]).map(([n, color]) => {
+                                const selected = satisfaction === n;
+                                return (
+                                  <button key={n} onClick={() => setSatisfaction(n)} style={{
+                                    flex: 1, padding: '6px 2px', borderRadius: 6, cursor: 'pointer',
+                                    border: `2px solid ${selected ? color : 'var(--border)'}`,
+                                    background: selected ? `${color}20` : 'white',
+                                    transition: 'all 0.15s', display: 'flex', flexDirection: 'column',
+                                    alignItems: 'center', gap: 2,
+                                  }}>
+                                    <span style={{ fontSize: 13, fontWeight: 800, color: selected ? color : 'var(--text-muted)' }}>{n}</span>
+                                    <span style={{ fontSize: 9, fontWeight: 700, color: selected ? color : 'var(--text-muted)', lineHeight: 1.2, textAlign: 'center' }}>{SAT_LABELS[n]}</span>
+                                  </button>
+                                );
+                              })}
                             </div>
                             <div style={{ display: 'flex', gap: 8 }}>
                               <button onClick={() => submitResolve(c)} disabled={!resolution.trim() || satisfaction === null || submitting} style={{ flex: 1, padding: '9px', background: 'var(--success)', color: 'white', border: 'none', borderRadius: 6, fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: resolution.trim() && satisfaction !== null ? 1 : 0.5 }}>

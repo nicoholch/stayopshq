@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { Complaint } from '@/types';
+import AppNav from '@/app/components/AppNav';
 
 interface Props {
   complaints: Complaint[];
@@ -198,7 +199,8 @@ export default function AnalyticsClient({ complaints }: Props) {
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: 88 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--off-white)', paddingTop: 72 }}>
+      <AppNav />
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 64px' }}>
 
         {/* Header */}

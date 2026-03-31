@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
@@ -19,13 +20,31 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // Check if this user has already completed onboarding
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
           .from('profiles').select('hotel_id').eq('id', user.id).single();
-        const destination = profile?.hotel_id ? '/dashboard' : '/onboarding';
-        return NextResponse.redirect(`${origin}${destination}`);
+
+        if (profile?.hotel_id) {
+          return NextResponse.redirect(`${origin}/dashboard`);
+        }
+
+        // Invited user: hotel_id is stored in user_metadata by /api/invite
+        const hotelId = user.user_metadata?.hotel_id as string | undefined;
+        const role    = (user.user_metadata?.role as string) ?? 'manager';
+
+        if (hotelId) {
+          const admin = createAdminClient();
+          await admin.from('profiles').insert({
+            id:        user.id,
+            hotel_id:  hotelId,
+            full_name: user.email?.split('@')[0] ?? 'Team Member',
+            role,
+          });
+          return NextResponse.redirect(`${origin}/dashboard`);
+        }
+
+        return NextResponse.redirect(`${origin}/onboarding`);
       }
       return NextResponse.redirect(`${origin}${next}`);
     }
