@@ -28,8 +28,8 @@ export default function SettingsClient({ currentUserId, hotel, team: initialTeam
   const [removing, setRemoving]   = useState<string | null>(null);
 
   const captureUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/capture`
-    : 'https://stayopshq.com/capture';
+    ? `${window.location.origin}/capture/${hotel.slug}`
+    : `https://stayopshq.com/capture/${hotel.slug}`;
 
   const [copied, setCopied] = useState(false);
   function copyLink() {
